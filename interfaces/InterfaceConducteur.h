@@ -1,0 +1,14 @@
+//
+// Created by RobLocal on 10/13/2017.
+//
+
+#ifndef SEVEN_AL_GROUP_INTERFACECONDUCTEUR_H
+#define SEVEN_AL_GROUP_INTERFACECONDUCTEUR_H
+
+
+class InterfaceConducteur {
+
+};
+
+
+#endif //SEVEN_AL_GROUP_INTERFACECONDUCTEUR_H
