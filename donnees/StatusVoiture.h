@@ -7,7 +7,10 @@
 
 
 class StatusVoiture {
-    
+public:
+    // contiendra au plus tard un struct en parametre
+    // contenant toutes les infos sur l'tat de la voiture
+    void update(float vitesse);
 };
 
 

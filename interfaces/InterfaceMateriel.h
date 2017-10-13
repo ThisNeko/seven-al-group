@@ -7,7 +7,8 @@
 
 
 class InterfaceMateriel {
-
+public:
+    void frein(float force);
 };
 
 
