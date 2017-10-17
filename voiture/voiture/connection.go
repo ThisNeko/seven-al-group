@@ -1,4 +1,4 @@
-package comm
+package voiture
 
 import (
 	"net"
@@ -9,21 +9,17 @@ import (
 	"bufio"
 )
 
-type Position struct{
-	X float64
-	Y float64
-}
 
-type Vitesse struct{
-	X float64
-	Y float64
-}
 
 type VoitureMessage struct {
 	ID int
 	Vitesse Vitesse
 	Position Position
 	Frein bool
+}
+
+func NewMessage(status Status) VoitureMessage{
+	return VoitureMessage(status.status)
 }
 
 type connection struct{
@@ -66,11 +62,12 @@ func receive(conn net.Conn) VoitureMessage{
 
 //goroutine du receiver
 //qui lit les messages reçus et fais des choses avec
-func (c connection) reveiverLoop(){
+func (c connection) reveiverLoop(reg *Registre){
 	for{
 		mess := receive(c.conn)
-		log.Println("Received:")
-		log.Println(mess)
+		//log.Println("Received:")
+		//log.Println(mess)
+		reg.Update(mess)
 	}
 }
 
@@ -84,7 +81,7 @@ func (c connection) Broadcast(info VoitureMessage){
 }
 
 //créé un connection
-func NewConnection(ip string) *connection{
+func NewConnection(ip string, reg *Registre) *connection{
 	conn, err := net.Dial("tcp", ip)
 	if err != nil {
 		log.Fatal(err)
@@ -96,6 +93,6 @@ func NewConnection(ip string) *connection{
 		info: make(chan VoitureMessage, 1),
 	}
 	go c.broadcastLoop()
-	go c.reveiverLoop()
+	go c.reveiverLoop(reg)
 	return &c
 }

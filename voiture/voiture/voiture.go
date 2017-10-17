@@ -1,13 +1,6 @@
 package voiture
 
-import (
-	"./comm"
-)
-
-type Position struct{
-	X float64
-	Y float64
-}
+import "time"
 
 type Materiel struct {
 	ID int
@@ -17,15 +10,18 @@ type Materiel struct {
 }
 
 func NewVoiture(ip string, materiel *Materiel) {
-	conn := comm.NewConnection(ip)
-	mess := comm.VoitureMessage{
-		ID:materiel.ID,
-		Vitesse:comm.Vitesse{materiel.Vitesse,0},
-		Position:comm.Position{materiel.Position.X,materiel.Position.Y},
-		Frein:materiel.Frein,
-	}
-	conn.Broadcast(mess)
+	frein := NewModuleFrein()
+	mods := NewModuleDispatcher()
+	mods.AddModule(frein)
+
+	reg := NewRegistre(&mods)
+	stat := NewStatus(&mods)
+
+	conn := NewConnection(ip,&reg)
+
 	for{
-		continue
+		<- time.After(50 * time.Millisecond)
+		stat.Update(*materiel)
+		conn.Broadcast(NewMessage(stat))
 	}
 }
