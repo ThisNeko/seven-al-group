@@ -2,6 +2,7 @@ package voiture
 
 import (
 	"math/rand"
+	"log"
 )
 
 type ModuleDispatcher []ModuleNotifier
@@ -39,4 +40,19 @@ func NewModuleFrein() ModuleNotifier{
 	frein := make(ModuleNotifier,1)
 	go moduleFrein(frein)
 	return frein
+}
+
+func moduleCounter(notify ModuleNotifier){
+	c := 0
+	for {
+		<- notify
+		c += 1
+		log.Println(c)
+	}
+}
+
+func NewModuleCounter() ModuleNotifier{
+	counter := make(ModuleNotifier,1)
+	go moduleCounter(counter)
+	return counter
 }
