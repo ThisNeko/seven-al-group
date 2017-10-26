@@ -14,8 +14,9 @@ func NewVoiture(ip string, materiel *Materiel) {
 	mods := NewModuleDispatcher()
 
 	reg := NewRegistre(&mods)
-	stat := NewStatus(&mods)
 	conn := NewConnection(ip,&reg)
+	stat := NewStatus(&mods,&conn)
+
 
 	frein := NewModuleFrein(&reg,&stat)
 	mods.AddModule(frein)

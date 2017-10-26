@@ -72,7 +72,7 @@ func (c connection) Broadcast(info StatusVoiture){
 }
 
 //créé un connection
-func NewConnection(ip string, reg *Registre) *connection{
+func NewConnection(ip string, reg *Registre) connection{
 	conn, err := net.Dial("tcp", ip)
 	if err != nil {
 		log.Fatal(err)
@@ -85,5 +85,5 @@ func NewConnection(ip string, reg *Registre) *connection{
 	}
 	go c.broadcastLoop()
 	go c.reveiverLoop(reg)
-	return &c
+	return c
 }

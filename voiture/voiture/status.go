@@ -38,7 +38,7 @@ func (status *Status) Get() StatusVoiture{
 	return <- response
 }
 
-func StatusLoop(stat Status, mods *ModuleDispatcher){
+func StatusLoop(stat Status, mods *ModuleDispatcher, conn *connection){
 	var status StatusVoiture
 	for{
 		select {
@@ -50,17 +50,18 @@ func StatusLoop(stat Status, mods *ModuleDispatcher){
 				Frein:mat.Frein,
 			}
 			mods.Notify()
+			conn.Broadcast(status)
 		case response := <- stat.get:
 			response <- status
 		}
 	}
 }
 
-func NewStatus(mods *ModuleDispatcher) Status{
+func NewStatus(mods *ModuleDispatcher, conn *connection) Status{
 	stat := Status{
 		make(chan Materiel),
 		make(chan chan StatusVoiture),
 	}
-	go StatusLoop(stat, mods)
+	go StatusLoop(stat, mods, conn)
 	return stat
 }
