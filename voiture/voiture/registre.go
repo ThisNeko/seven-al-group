@@ -1,18 +1,42 @@
 package voiture
 
 type Registre struct{
-	mods *ModuleDispatcher
-	voitures map[int]VoitureMessage
+	update chan StatusVoiture
+	getAll chan chan map[int]StatusVoiture
 }
 
-func NewRegistre(mods *ModuleDispatcher) Registre{
-	return Registre{
-		mods,
-		make(map[int]VoitureMessage),
+func RegistreLoop(reg Registre, mods *ModuleDispatcher){
+	voitures := make(map[int]StatusVoiture)
+	for{
+		select {
+		case message := <- reg.update:
+			voitures[message.ID] = message
+			mods.Notify()
+		case response := <- reg.getAll:
+			tmp := make(map[int]StatusVoiture)
+			for k,v := range voitures{
+				tmp[k] = v
+			}
+			response <- tmp
+		}
 	}
 }
 
-func (reg *Registre) Update(mess VoitureMessage){
-	reg.voitures[mess.ID] = mess
-	reg.mods.Notify()
+func NewRegistre(mods *ModuleDispatcher) Registre{
+	registre := Registre{
+		make(chan StatusVoiture),
+		make(chan chan map[int]StatusVoiture),
+	}
+	go RegistreLoop(registre,mods)
+	return registre
+}
+
+func (reg *Registre) Update(mess StatusVoiture){
+	reg.update <- mess
+}
+
+func (reg *Registre) GetAll() map[int]StatusVoiture {
+	response := make(chan map[int]StatusVoiture)
+	reg.getAll <- response
+	return <-response
 }

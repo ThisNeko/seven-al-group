@@ -9,28 +9,19 @@ import (
 	"bufio"
 )
 
-
-
-type VoitureMessage struct {
-	ID int
-	Vitesse Vitesse
-	Position Position
-	Frein bool
-}
-
-func NewMessage(status Status) VoitureMessage{
-	return VoitureMessage(status.status)
+func NewMessage(status Status) StatusVoiture {
+	return StatusVoiture(status.Get())
 }
 
 type connection struct{
 	id int
 	ip string
 	conn net.Conn
-	info chan VoitureMessage
+	info chan StatusVoiture
 }
 
 //envoie le message sur le reseau
-func (c connection) broadcast(info VoitureMessage){
+func (c connection) broadcast(info StatusVoiture){
 	j, err := json.Marshal(info)
 	if err != nil {
 		log.Fatal(err)
@@ -49,13 +40,13 @@ func (c connection) broadcastLoop(){
 }
 
 //lit les messages reçus
-func receive(conn net.Conn) VoitureMessage{
+func receive(conn net.Conn) StatusVoiture {
 	reader := bufio.NewReader(conn)
 	line, err := reader.ReadString('\n')
 	if err != nil {
 		log.Fatal(err)
 	}
-	var mat VoitureMessage
+	var mat StatusVoiture
 	json.Unmarshal([]byte(line),&mat)
 	return mat
 }
@@ -72,7 +63,7 @@ func (c connection) reveiverLoop(reg *Registre){
 }
 
 //methode exportée qui met les infos à envoyer dans le channel
-func (c connection) Broadcast(info VoitureMessage){
+func (c connection) Broadcast(info StatusVoiture){
 	select{
 	case <- c.info:
 	default:
@@ -90,7 +81,7 @@ func NewConnection(ip string, reg *Registre) *connection{
 		id: rand.Int(),
 		ip: ip,
 		conn: conn,
-		info: make(chan VoitureMessage, 1),
+		info: make(chan StatusVoiture, 1),
 	}
 	go c.broadcastLoop()
 	go c.reveiverLoop(reg)

@@ -17,10 +17,8 @@ func NewVoiture(ip string, materiel *Materiel) {
 	stat := NewStatus(&mods)
 	conn := NewConnection(ip,&reg)
 
-	frein := NewModuleFrein()
+	frein := NewModuleFrein(&reg,&stat)
 	mods.AddModule(frein)
-	counter := NewModuleCounter()
-	mods.AddModule(counter)
 
 	for{
 		<- time.After(50 * time.Millisecond)

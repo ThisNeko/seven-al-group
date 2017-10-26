@@ -1,9 +1,6 @@
 package voiture
 
-import (
-	"math/rand"
-	"log"
-)
+import "time"
 
 type ModuleDispatcher []ModuleNotifier
 
@@ -27,32 +24,31 @@ func (mods *ModuleDispatcher) Notify(){
 
 type ModuleNotifier chan struct{}
 
-func moduleFrein(frein ModuleNotifier){
+func moduleFrein(frein ModuleNotifier, reg *Registre, stat *Status){
 	for {
 		<- frein
-		if rand.Intn(100) < 2 {
-			AlerteFrein()
+		voitures := reg.GetAll()
+		status := stat.Get()
+		futurePos := Position{
+			status.Position.X+status.Vitesse.X,
+			status.Position.Y+status.Vitesse.Y,
+		}
+		for _,v := range voitures{
+			if status.Position.X > v.Position.X {continue}
+			futurePos2 := Position{
+				v.Position.X+v.Vitesse.X,
+				v.Position.Y+v.Vitesse.Y,
+			}
+			if futurePos.Distance(futurePos2) <= 10 {
+				AlerteFrein()
+				<- time.After(time.Second)
+			}
 		}
 	}
 }
 
-func NewModuleFrein() ModuleNotifier{
+func NewModuleFrein(reg *Registre, stat *Status) ModuleNotifier{
 	frein := make(ModuleNotifier,1)
-	go moduleFrein(frein)
+	go moduleFrein(frein, reg, stat)
 	return frein
-}
-
-func moduleCounter(notify ModuleNotifier){
-	c := 0
-	for {
-		<- notify
-		c += 1
-		log.Println(c)
-	}
-}
-
-func NewModuleCounter() ModuleNotifier{
-	counter := make(ModuleNotifier,1)
-	go moduleCounter(counter)
-	return counter
 }
