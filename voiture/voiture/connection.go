@@ -9,8 +9,6 @@ import (
 	"bufio"
 )
 
-
-
 type VoitureMessage struct {
 	ID int
 	Vitesse Vitesse
