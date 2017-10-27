@@ -58,7 +58,7 @@ func (c connection) reveiverLoop(reg *Registre){
 		mess := receive(c.conn)
 		//log.Println("Received:")
 		//log.Println(mess)
-		reg.Update(mess)
+		reg.UpdateVoiture(mess)
 	}
 }
 

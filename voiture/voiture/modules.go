@@ -27,7 +27,7 @@ type ModuleNotifier chan struct{}
 func moduleFrein(frein ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur){
 	for {
 		<- frein
-		voitures := reg.GetAll()
+		voitures := reg.GetAllVoiture()
 		status := stat.Get()
 		futurePos := Position{
 			status.Position.X+status.Vitesse.X,
