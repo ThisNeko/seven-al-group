@@ -34,8 +34,8 @@ func main(){
 	}
 
 	log.Println(mat)
-
-	go voiture.NewVoiture("localhost:1234",&mat)
+	conducteur := voiture.ConducteurLog{}
+	go voiture.NewVoiture("localhost:1234", &mat, conducteur, time.After)
 
 	for{
 		reader := bufio.NewReader(os.Stdin)

@@ -1,4 +1,5 @@
-package main
+package wifi
+
 
 import (
 	"net"
@@ -103,7 +104,7 @@ func (user user) getMessage(message chan string, disconnect chan struct{}) {
 		disconnect <- struct{}{}
 		return
 	}
-	log.Println(user.conn.RemoteAddr().String() + " sent : " + line)
+	//log.Println(user.conn.RemoteAddr().String() + " sent : " + line)
 	message <- line
 }
 
@@ -143,7 +144,7 @@ func handleConnection(pool *userPool, conn net.Conn) {
 	}
 }
 
-func main() {
+func Main() {
 	listener, err := net.Listen("tcp", "localhost:1234")
 	if err != nil {
 		log.Fatal(err)

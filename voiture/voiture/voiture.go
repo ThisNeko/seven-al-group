@@ -9,7 +9,7 @@ type Materiel struct {
 	Frein bool
 }
 
-func NewVoiture(ip string, materiel *Materiel) {
+func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func(d time.Duration) <- chan time.Time) {
 
 	mods := NewModuleDispatcher()
 
@@ -18,11 +18,11 @@ func NewVoiture(ip string, materiel *Materiel) {
 	stat := NewStatus(&mods,&conn)
 
 
-	frein := NewModuleFrein(&reg,&stat)
+	frein := NewModuleFrein(&reg,&stat, conducteur)
 	mods.AddModule(frein)
 
 	for{
-		<- time.After(50 * time.Millisecond)
+		<- after(50 * time.Millisecond)
 		stat.Update(*materiel)
 		conn.Broadcast(NewMessage(stat))
 	}
