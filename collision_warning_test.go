@@ -1,0 +1,85 @@
+package seven_al_group
+
+import (
+	"./wifi"
+	"./voiture/voiture"
+	"testing"
+	"time"
+	"log"
+)
+
+type ConducteurTest struct{
+	Frein chan bool
+}
+
+func (c ConducteurTest) AlerteFrein() {
+	c.Frein <- true
+}
+
+func TestCollisionWarning(t *testing.T){
+	go wifi.Main()
+
+	mat1 := voiture.Materiel{
+		ID: 1,
+		Vitesse: 100,
+		Position: voiture.Position{0, 0},
+		Frein: false,
+	}
+	mat2 := voiture.Materiel{
+		ID: 2,
+		Vitesse: 100,
+		Position: voiture.Position{100, 0},
+		Frein: false,
+	}
+
+	c1 := ConducteurTest{make (chan bool)}
+	c2 := ConducteurTest{make (chan bool)}
+
+	_time1 := make(chan time.Time)
+	_time2 := make(chan time.Time)
+	go voiture.NewVoiture("localhost:1234", &mat1, c1, func(d time.Duration) <- chan time.Time { return _time1 })
+	go voiture.NewVoiture("localhost:1234", &mat2, c2, func(d time.Duration) <- chan time.Time { return _time2 })
+
+	time.Sleep(time.Second * 3)
+	mat1.Position.X = 89
+	log.Println("Les voitures roulent pendant 1 seconde")
+
+	for i := 0; i < 20; i++ {
+		_time1 <- time.Now()
+		_time2 <- time.Now()
+
+	}
+
+	// Test que les voitures n'ont pas freiné
+
+	select {
+		case <- c1.Frein:
+			t.Fatal("FATAL: La voiture 1 a freiné!")
+		case <- c2.Frein:
+			t.Fatal("FATAL: La voiture 2 a freiné!")
+		default:
+	}
+
+	// On colle les voitures a distance suffisante pour déclencer le module de frein
+
+	log.Println("La voiture 2 est 10 metres devant la voiture 1")
+	mat1.Position.X = 90
+
+	time.Sleep(time.Second)
+
+	_time1 <- time.Now()
+	_time2 <- time.Now()
+
+	time.Sleep(time.Second)
+
+	// On vérifie que la première voiture a bien freiné
+
+	select {
+	case <- c1.Frein:
+		break
+	case <- c2.Frein:
+		t.Fatal("FATAL: La voiture 2 a freiné!")
+	default:
+		t.Fatal("FATAL: La voiture 1 n'a pas freiné!")
+	}
+}
