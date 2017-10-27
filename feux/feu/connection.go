@@ -12,6 +12,8 @@ type FeuMessage struct {
 	ID int
 	Position Position
 	Couleur Couleur
+	Ticker int
+
 }
 
 func NewMessage(feu Feu) FeuMessage{
@@ -65,7 +67,4 @@ func NewConnection(ip string) *connection{
 	go c.broadcastLoop()
 	return &c
 }
-
-
-
 
