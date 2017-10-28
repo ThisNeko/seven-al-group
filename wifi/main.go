@@ -1,5 +1,4 @@
-package wifi
-
+package main
 
 import (
 	"net"
@@ -144,7 +143,7 @@ func handleConnection(pool *userPool, conn net.Conn) {
 	}
 }
 
-func Main() {
+func main() {
 	listener, err := net.Listen("tcp", "localhost:1234")
 	if err != nil {
 		log.Fatal(err)

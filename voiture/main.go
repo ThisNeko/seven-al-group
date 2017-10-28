@@ -8,7 +8,7 @@ import(
 	"bufio"
 	"os"
 	"fmt"
-	"strconv"
+	//"strconv"
 )
 
 
@@ -16,15 +16,15 @@ import(
 func main(){
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	X, err := strconv.ParseFloat(os.Args[1],64)
-	if err != nil {
-		X = 0
-	}
+	//X, err := strconv.ParseFloat(os.Args[1],64)
+	//if err != nil {
+		X := float64(0)
+	//}
 
-	Y, err := strconv.ParseFloat(os.Args[2],64)
-	if err != nil {
-		Y = 0
-	}
+	//Y, err := strconv.ParseFloat(os.Args[2],64)
+	//if err != nil {
+		Y := float64(0)
+	//}
 
 	mat := voiture.Materiel{
 		ID: rand.Int(),
