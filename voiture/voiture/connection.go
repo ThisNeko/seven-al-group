@@ -60,6 +60,7 @@ func receive(conn net.Conn) message {
 //goroutine du receiver
 //qui lit les messages reçus et fais des choses avec
 func (c connection) receiverLoop(reg *Registre){
+
 	for{
 		mess := receive(c.conn)
 		//log.Println("Received:")
@@ -68,13 +69,17 @@ func (c connection) receiverLoop(reg *Registre){
 			var mat StatusVoiture
 			json.Unmarshal([]byte(mess.Info),&mat)
 			reg.UpdateVoiture(mat)
-			log.Println("La voiture recoit un message d'une autre voiture")
+			//log.Println("La voiture recoit un message d'une autre voiture")
 		}
 		if mess.TypeEnum=="FEU"{
 			var mat Feu
-			json.Unmarshal([]byte(mess.Info),&mat)
+			err := json.Unmarshal([]byte(mess.Info),&mat)
+			if err != nil {
+				log.Fatal(err)
+			}
+			//log.Println("Id du Feu %d",mat.ID)
 			reg.UpdateFeu(mat)
-			log.Println("La voiture recoit un message d'un FEU")
+			//log.Println("La voiture recoit un message d'un FEU")
 		}
 	}
 }

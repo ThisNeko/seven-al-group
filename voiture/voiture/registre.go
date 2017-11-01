@@ -9,14 +9,24 @@ type Registre struct{
 
 func RegistreLoop(reg Registre, mods *ModuleDispatcher){
 	voitures := make(map[int]StatusVoiture)
+	feux := make(map[int]Feu)
 	for{
 		select {
 		case message := <- reg.updateVoiture:
 			voitures[message.ID] = message
 			mods.Notify()
+		case message := <- reg.updateFeu:
+			feux[message.ID] = message
+			mods.Notify()
 		case response := <- reg.getAllVoiture:
 			tmp := make(map[int]StatusVoiture)
 			for k,v := range voitures{
+				tmp[k] = v
+			}
+			response <- tmp
+		case response := <- reg.getAllFeux:
+			tmp := make(map[int]Feu)
+			for k,v := range feux{
 				tmp[k] = v
 			}
 			response <- tmp

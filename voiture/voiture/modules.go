@@ -1,7 +1,9 @@
 package voiture
 
 import ("time"
-		"math")
+		"math"
+	"log"
+)
 
 type ModuleDispatcher []ModuleNotifier
 
@@ -55,18 +57,25 @@ func NewModuleFrein(reg *Registre, stat *Status, conducteur Conducteur) ModuleNo
 }
 //Pour le moment on admet qu'il n'y a qu'un seul feu
 func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur){
+	log.Println("Demarrage module feu")
 	for {
 		<- feu
 		feux := reg.GetAllFeux()
 		status := stat.Get()
+
 		if len(feux) > 0 {
-			temps:=feux[1].Ticker
-			X1 := feux[1].Position.X
-			Y1 := feux[1].Position.Y
+			temps:=feux[0].Ticker
+			println(temps)
+			X1 := feux[0].Position.X
+			Y1 := feux[0].Position.Y
+			println(X1)
 			X2 := status.Position.X
 			Y2 := status.Position.Y
+			println(X2)
 			distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
+			println(distance)
 			vitesse := distance/float64(temps)
+			println(vitesse)
 			conducteur.VitesseFeu(vitesse)
 		}
 	}

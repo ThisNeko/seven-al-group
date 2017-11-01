@@ -14,5 +14,5 @@ func (c ConducteurLog) AlerteFrein() {
 }
 
 func (c ConducteurLog) VitesseFeu(vitesse float64) {
-	log.Println("Rouler a %g pour avoir le feu vert",vitesse)
+	//log.Println("Rouler a %d pour avoir le feu vert",vitesse)
 }

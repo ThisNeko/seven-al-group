@@ -20,6 +20,8 @@ func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func
 
 	frein := NewModuleFrein(&reg,&stat, conducteur)
 	mods.AddModule(frein)
+	feu := NewModuleFeu(&reg,&stat, conducteur)
+	mods.AddModule(feu)
 
 	for{
 		<- after(50 * time.Millisecond)
