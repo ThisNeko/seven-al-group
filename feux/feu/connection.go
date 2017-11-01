@@ -16,8 +16,8 @@ type FeuMessage struct {
 }
 
 type message struct{
-	typeEnum string
-	info []byte
+	TypeEnum string
+	Info string
 }
 
 func NewMessage(feu Feu) FeuMessage{
@@ -60,7 +60,7 @@ func (c connection) Broadcast(inf FeuMessage){
 	}
 	c.info <- message{
 		"FEU",
-		info,
+		string(info),
 	}
 }
 

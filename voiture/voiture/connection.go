@@ -10,8 +10,8 @@ import (
 )
 
 type message struct{
-		typeEnum string
-		info []byte
+		TypeEnum string
+		Info string
 }
 
 func NewMessage(status Status) StatusVoiture {
@@ -32,6 +32,7 @@ func (c connection) broadcast(info message){
 		log.Fatal(err)
 	}
 	fmt.Fprintf(c.conn,string(j)+"\n")
+	//log.Println("Transformation []byte -> string = "+string(j))
 }
 
 //goroutine du broadcaster
@@ -63,15 +64,15 @@ func (c connection) receiverLoop(reg *Registre){
 		mess := receive(c.conn)
 		//log.Println("Received:")
 		//log.Println(mess)
-		if mess.typeEnum=="VOITURE"{
+		if mess.TypeEnum=="VOITURE"{
 			var mat StatusVoiture
-			json.Unmarshal(mess.info,&mat)
+			json.Unmarshal([]byte(mess.Info),&mat)
 			reg.UpdateVoiture(mat)
 			log.Println("La voiture recoit un message d'une autre voiture")
 		}
-		if mess.typeEnum=="FEU"{
+		if mess.TypeEnum=="FEU"{
 			var mat Feu
-			json.Unmarshal(mess.info,&mat)
+			json.Unmarshal([]byte(mess.Info),&mat)
 			reg.UpdateFeu(mat)
 			log.Println("La voiture recoit un message d'un FEU")
 		}
@@ -91,7 +92,7 @@ func (c connection) Broadcast(inf StatusVoiture){
 	}
 	c.info <- message{
 		"VOITURE",
-		info,
+		string(info),
 	}
 }
 
