@@ -18,6 +18,7 @@ func main(){
 		Position: feu.Position{100,50},
 		Couleur: feu.Couleur(1),
 		Ticker: 0,
+		Timer: 10,
 	}
 
 	log.Println(feux)

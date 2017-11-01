@@ -13,6 +13,7 @@ type FeuMessage struct {
 	Position Position
 	Couleur Couleur
 	Ticker int
+	Timer int
 }
 
 type message struct{

@@ -19,13 +19,13 @@ func NewFeux(ip string, feu *Feu) {
 		go func() {
 			select {
 			case <-tickerChan:
-				if feu.Ticker == 10 {
+				if feu.Ticker == feu.Timer {
 					feu.Ticker = 0
 					if b {
-						feu.Couleur = feu.Couleur + 2
+						feu.Couleur = feu.Couleur + 1
 						b = false
 					} else {
-						feu.Couleur = feu.Couleur - 2
+						feu.Couleur = feu.Couleur - 1
 						b = true
 					}
 				} else {

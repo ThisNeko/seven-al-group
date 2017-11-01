@@ -20,6 +20,7 @@ type Feu struct {
 	Position Position
 	Couleur  Couleur
 	Ticker int
+	Timer int
 }
 
 func (couleur Couleur) String() string {
@@ -34,6 +35,7 @@ func (feu *Feu) Update(updated Feu){
 		Position:Position{updated.Position.X,updated.Position.Y},
 		Couleur:updated.Couleur,
 		Ticker:updated.Ticker,
+		Timer:updated.Timer,
 	}
 	//if t := updated.ticker {
 
