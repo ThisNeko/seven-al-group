@@ -1,12 +1,26 @@
 package feu
 
 import (
+	"math/rand"
 	"time"
+	"log"
 )
 
-func NewFeux(ip string, feu *Feu) {
+func NewFeu(ip string) {
 
-	stat := NewFeu()
+	rand.Seed(time.Now().UTC().UnixNano())
+	feu := Feu{
+		ID: rand.Int(),
+		Position: Position{0,0},
+		Couleur: Couleur(1),
+		Ticker: 0,
+	}
+
+	log.Println(feu)
+
+
+
+	stat := newFeu()
 	conn := NewConnection(ip)
 	tickerChan:=time.NewTicker(time.Second).C
 	//tickChan:=time.NewTicker(time.Second).C
@@ -34,7 +48,7 @@ func NewFeux(ip string, feu *Feu) {
 			}
 		}()
 
-		stat.Update(*feu)
+		stat.Update(feu)
 		conn.Broadcast(NewMessage(stat))
 
 	}

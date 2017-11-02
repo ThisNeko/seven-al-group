@@ -1,17 +1,15 @@
 package main
 
-import(
-	"log"
+import (
+	"../../src/voiture"
 	"math/rand"
 	"time"
-	"./voiture"
-	"bufio"
-	"os"
-	"fmt"
 	"strconv"
+	"os"
+	"log"
+	"bufio"
+	"fmt"
 )
-
-
 
 func main(){
 	rand.Seed(time.Now().UTC().UnixNano())

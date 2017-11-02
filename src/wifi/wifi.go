@@ -144,7 +144,7 @@ func handleConnection(pool *userPool, conn net.Conn) {
 	}
 }
 
-func Main() {
+func StartWifi() {
 	listener, err := net.Listen("tcp", "localhost:1234")
 	if err != nil {
 		log.Fatal(err)

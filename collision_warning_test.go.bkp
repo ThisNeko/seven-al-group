@@ -1,7 +1,7 @@
 package seven_al_group
 
 import (
-	"./wifi"
+	"./src/wifi"
 	"./voiture/voiture"
 	"testing"
 	"time"

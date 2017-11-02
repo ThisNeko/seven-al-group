@@ -46,7 +46,7 @@ func (feu *Feu) Update(updated Feu){
 	//}
 }
 
-func NewFeu() Feu{
+func newFeu() Feu{
 	feu := Feu{}
 	return feu
 }
