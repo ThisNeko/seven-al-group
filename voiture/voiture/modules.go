@@ -80,17 +80,56 @@ func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Condu
 		}*/
 
 		for _,f := range feux{
-			temps:=f.Ticker
-			X1 := f.Position.X
-			Y1 := f.Position.Y
-			X2 := status.Position.X
-			Y2 := status.Position.Y
-			distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
-			vitesse := (distance/1000)/(float64(temps)/3600)
+			time:=f.Timer - f.Ticker
+			var vitesse float64
+
+			if f.Couleur.String()=="RED"{
+				temps := time
+				X1 := f.Position.X
+				Y1 := f.Position.Y
+				X2 := status.Position.X
+				Y2 := status.Position.Y
+				distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
+				vitesseT := (distance/1000)/(float64(temps)/3600)
+
+				if vitesseT > 50{//si je ne peux pas avoir le prochain feu vert alors j'aurais celui d'après
+					temps := time + (f.Timer*2)
+					X1 := f.Position.X
+					Y1 := f.Position.Y
+					X2 := status.Position.X
+					Y2 := status.Position.Y
+					distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
+					vitesse = (distance/1000)/(float64(temps)/3600)
+				} else{
+					vitesse = vitesseT
+				}
+
+			} else if f.Couleur.String()=="GREEN"{//je calcul la vitesse pour le prochain feu vert
+				temps:= time
+				X1 := f.Position.X
+				Y1 := f.Position.Y
+				X2 := status.Position.X
+				Y2 := status.Position.Y
+				distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
+				vitesseT := (distance/1000)/(float64(temps)/3600)
+
+				if vitesseT > 50{//si je ne peux pas avoir le prochain feu vert alors j'aurais celui d'après
+					temps := time + f.Timer
+					X1 := f.Position.X
+					Y1 := f.Position.Y
+					X2 := status.Position.X
+					Y2 := status.Position.Y
+					distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
+					vitesse = (distance/1000)/(float64(temps)/3600)
+				} else{
+					vitesse = vitesseT
+				}
+			}
+
 			conducteur.VitesseFeu(vitesse,f)
 		}
 
-
+		<- time.After(time.Second)
 	}
 }
 

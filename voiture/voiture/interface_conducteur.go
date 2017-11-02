@@ -14,5 +14,5 @@ func (c ConducteurLog) AlerteFrein() {
 }
 
 func (c ConducteurLog) VitesseFeu(vitesse float64, feu Feu) {
-	log.Println(vitesse, feu.Ticker, feu.Couleur)
+	log.Printf("La vitesse recommandée est : %d km/h ; le couleur du feu est %s et va changer de couleur dans %d sec",int(vitesse),feu.Couleur.String(),feu.Timer-feu.Ticker)
 }
