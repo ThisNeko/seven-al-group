@@ -1,8 +1,6 @@
 package voiture
 
-import (
-	"time"
-)
+import "time"
 
 type Materiel struct {
 	ID int
@@ -11,8 +9,7 @@ type Materiel struct {
 	Frein bool
 }
 
-func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func(d time.Duration) <- chan time.Time,
-	shutdownChan chan struct{}) {
+func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func(d time.Duration) <- chan time.Time) {
 
 	mods := NewModuleDispatcher()
 
@@ -23,16 +20,12 @@ func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func
 
 	frein := NewModuleFrein(&reg,&stat, conducteur)
 	mods.AddModule(frein)
+	feu := NewModuleFeu(&reg,&stat, conducteur)
+	mods.AddModule(feu)
 
 	for{
-		select{
-			case <- after(50 * time.Millisecond):
-				stat.Update(*materiel)
-				conn.Broadcast(NewMessage(stat))
-			case <- shutdownChan:
-				time.Sleep(time.Millisecond * 250)
-				conn.conn.Close()
-				return
-		}
+		<- after(50 * time.Millisecond)
+		stat.Update(*materiel)
+		conn.Broadcast(NewMessage(stat))
 	}
 }
