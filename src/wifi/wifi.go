@@ -144,7 +144,7 @@ func handleConnection(pool *userPool, conn net.Conn) {
 	}
 }
 
-func StartWifi() {
+func StartWifi(shutdownChan chan struct{}) {
 	listener, err := net.Listen("tcp", "localhost:1234")
 	if err != nil {
 		log.Fatal(err)
@@ -153,12 +153,28 @@ func StartWifi() {
 	pool := newUserPool()
 	log.Println("Server localhost:1234 ready.")
 
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Println(err)
-			continue
+	acceptChannel := make(chan *net.Conn)
+
+	go func(){
+		for {
+			conn, err := listener.Accept()
+			if err != nil {
+				log.Println(err)
+				continue
+			}
+			acceptChannel <- &conn
 		}
-		go handleConnection(pool, conn)
+	}()
+
+	for {
+		select{
+		case <-shutdownChan:
+			time.Sleep(time.Millisecond * 100)
+			listener.Close()
+			return
+		case conn := <- acceptChannel:
+			go handleConnection(pool, *conn)
+		}
 	}
+
 }

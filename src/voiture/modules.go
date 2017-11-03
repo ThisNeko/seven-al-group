@@ -1,6 +1,8 @@
 package voiture
 
-import "time"
+import (
+	"time"
+)
 
 type ModuleDispatcher []ModuleNotifier
 
@@ -39,7 +41,11 @@ func moduleFrein(frein ModuleNotifier, reg *Registre, stat *Status, conducteur C
 				v.Position.X+v.Vitesse.X,
 				v.Position.Y+v.Vitesse.Y,
 			}
-			if futurePos.Distance(futurePos2) <= 10 {
+			//if futurePos.Distance(futurePos2) <= 10 {
+			//	conducteur.AlerteFrein()
+			//	<- time.After(time.Second)
+			//}
+			if futurePos2.X - futurePos.X <= 10 {
 				conducteur.AlerteFrein()
 				<- time.After(time.Second)
 			}
