@@ -47,8 +47,7 @@ func main(){
 			log.Println("Ticking")
 			mat.Position.X += mat.Vitesse
 			time.Sleep(time.Millisecond * 51)
-			fmt.Fprintf(connVoiture, "%d\n", uint64(mat.Vitesse))
-			fmt.Fprintf(connVoiture, "%d\n", uint64(mat.Position.X))
+			fmt.Fprintf(connVoiture, "%d\n%d\n", uint64(mat.Vitesse), uint64(mat.Position.X))
 		//case "q\n":
 		//	log.Println("Quitting...")
 		//	shutdownCar <- struct{}{}

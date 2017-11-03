@@ -22,12 +22,12 @@ func main(){
 	conn, _ := net.Dial("tcp", "localhost:25252")
 
 	for{
-		tmp, _ := bufio.NewReader(conn).ReadString('\n')
+		rdr := bufio.NewReader(conn)
+		tmp, _ := rdr.ReadString('\n')
 		tmp2, _ :=  strconv.Atoi(tmp[:len(tmp)-1])
-
 		vitesse := int64(tmp2)
 
-		tmp, _ = bufio.NewReader(conn).ReadString('\n')
+		tmp, _ = rdr.ReadString('\n')
 		tmp2, _ =  strconv.Atoi(tmp[:len(tmp)-1])
 
 		posX := int64(tmp2)
