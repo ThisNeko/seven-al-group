@@ -13,7 +13,6 @@ import (
 
 func main(){
 	shutdownWifi := make(chan struct{})
-	shutdownCar := make(chan struct{})
 	go wifi.StartWifi(shutdownWifi)
 
 	mat := voiture.Materiel{
@@ -24,7 +23,7 @@ func main(){
 	}
 
 	conducteur := voiture.ConducteurLog{}
-	go voiture.NewVoiture("localhost:1234", &mat, conducteur, time.After, shutdownCar)
+	go voiture.NewVoiture("localhost:1234", &mat, conducteur, time.After)
 
 	listener, err := net.Listen("tcp", "localhost:25252")
 	if err != nil {

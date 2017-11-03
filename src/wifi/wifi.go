@@ -1,6 +1,5 @@
 package wifi
 
-
 import (
 	"net"
 	"bufio"

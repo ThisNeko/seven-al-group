@@ -9,6 +9,11 @@ import (
 	"bufio"
 )
 
+type message struct{
+		TypeEnum string
+		Info string
+}
+
 func NewMessage(status Status) StatusVoiture {
 	return StatusVoiture(status.Get())
 }
@@ -17,16 +22,17 @@ type connection struct{
 	id int
 	ip string
 	conn net.Conn
-	info chan StatusVoiture
+	info chan message
 }
 
 //envoie le message sur le reseau
-func (c connection) broadcast(info StatusVoiture){
+func (c connection) broadcast(info message){
 	j, err := json.Marshal(info)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Fprintf(c.conn,string(j)+"\n")
+	//log.Println("Transformation []byte -> string = "+string(j))
 }
 
 //goroutine du broadcaster
@@ -40,35 +46,60 @@ func (c connection) broadcastLoop(){
 }
 
 //lit les messages reçus
-func receive(conn net.Conn) StatusVoiture {
+func receive(conn net.Conn) message {
 	reader := bufio.NewReader(conn)
 	line, err := reader.ReadString('\n')
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	var mat StatusVoiture
+	var mat message
 	json.Unmarshal([]byte(line),&mat)
 	return mat
 }
 
 //goroutine du receiver
 //qui lit les messages reçus et fais des choses avec
-func (c connection) reveiverLoop(reg *Registre){
+func (c connection) receiverLoop(reg *Registre){
+
 	for{
 		mess := receive(c.conn)
 		//log.Println("Received:")
 		//log.Println(mess)
-		reg.UpdateVoiture(mess)
+		if mess.TypeEnum=="VOITURE"{
+			var mat StatusVoiture
+			json.Unmarshal([]byte(mess.Info),&mat)
+			reg.UpdateVoiture(mat)
+			//log.Println("La voiture recoit un message d'une autre voiture")
+		}
+		if mess.TypeEnum=="FEU"{
+			var mat Feu
+			err := json.Unmarshal([]byte(mess.Info),&mat)
+			if err != nil {
+				log.Fatal(err)
+			}
+			//log.Println("Id du Feu %d",mat.ID)
+			reg.UpdateFeu(mat)
+			//log.Println("La voiture recoit un message d'un FEU")
+		}
 	}
 }
 
 //methode exportée qui met les infos à envoyer dans le channel
-func (c connection) Broadcast(info StatusVoiture){
+func (c connection) Broadcast(inf StatusVoiture){
+	info, err := json.Marshal(inf)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	select{
 	case <- c.info:
 	default:
 	}
-	c.info <- info
+	c.info <- message{
+		"VOITURE",
+		string(info),
+	}
 }
 
 //créé un connection
@@ -81,9 +112,9 @@ func NewConnection(ip string, reg *Registre) connection{
 		id: rand.Int(),
 		ip: ip,
 		conn: conn,
-		info: make(chan StatusVoiture, 1),
+		info: make(chan message, 1),
 	}
 	go c.broadcastLoop()
-	go c.reveiverLoop(reg)
+	go c.receiverLoop(reg)
 	return c
 }

@@ -13,7 +13,12 @@ type FeuMessage struct {
 	Position Position
 	Couleur Couleur
 	Ticker int
+	Timer int
+}
 
+type message struct{
+	TypeEnum string
+	Info string
 }
 
 func NewMessage(feu Feu) FeuMessage{
@@ -24,10 +29,10 @@ type connection struct{
 	id int
 	ip string
 	conn net.Conn
-	info chan FeuMessage
+	info chan message
 }
 
-func (c connection) broadcast(info FeuMessage){
+func (c connection) broadcast(info message){
 	j, err := json.Marshal(info)
 	if err != nil {
 		log.Fatal(err)
@@ -44,12 +49,20 @@ func (c connection) broadcastLoop(){
 }
 
 //methode exportée qui met les infos à envoyer dans le channel
-func (c connection) Broadcast(info FeuMessage){
+func (c connection) Broadcast(inf FeuMessage){
+	info, err := json.Marshal(inf)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	select{
 	case <- c.info:
 	default:
 	}
-	c.info <- info
+	c.info <- message{
+		"FEU",
+		string(info),
+	}
 }
 
 //créé un connection
@@ -62,9 +75,8 @@ func NewConnection(ip string) *connection{
 		id: rand.Int(),
 		ip: ip,
 		conn: conn,
-		info: make(chan FeuMessage, 1),
+		info: make(chan message, 1),
 	}
 	go c.broadcastLoop()
 	return &c
 }
-

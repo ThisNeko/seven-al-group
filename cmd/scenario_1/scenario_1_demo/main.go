@@ -17,7 +17,7 @@ func main(){
 	}
 
 	conducteur := voiture.ConducteurLog{}
-	go voiture.NewVoiture("localhost:1234", &mat, conducteur, time.After, make(chan struct{}))
+	go voiture.NewVoiture("localhost:1234", &mat, conducteur, time.After)
 
 	conn, _ := net.Dial("tcp", "localhost:25252")
 
