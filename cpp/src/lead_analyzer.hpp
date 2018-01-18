@@ -1,0 +1,6 @@
+#ifndef LEAD_ANALYZER_H
+#define LEAD_ANALYZER_H
+
+
+
+#endif // LEAD_ANALYZER_H
