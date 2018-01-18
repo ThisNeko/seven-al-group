@@ -1,9 +1,9 @@
 #include "controller.hpp"
-#include<iostream>
+#include <iostream>
 
 int main(){
+    Controller controller;
+	controller.ControllerLoop();
 
-	std::cout<<"coucou"<<std::endl;
 	return 0;
-    
 }

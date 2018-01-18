@@ -1,6 +1,8 @@
-#ifndef TRAFFIC_LIGHTS_ANALYZER_H
-#define TRAFFIC_LIGHTS_ANALYZER_H
+#include "traffic_lights_analyzer.hpp"
 
+TrafficLightStatus* SelectTrafficLight(const std::list <TrafficLightStatus> trafficLightsRegistry, const CarStatus &carStatus)
+{
+    TrafficLightStatus *selected = nullptr;
 
-
-#endif // TRAFFIC_LIGHTS_ANALYZER_H
+    return selected;
+}
