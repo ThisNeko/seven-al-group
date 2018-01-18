@@ -20,6 +20,8 @@ typedef struct {
     Position position;
     Speed speed;
     Acceleration acceleration;
+    bool brakes;
+    int ID;
 } CarStatus;
 
 #endif // CAR_STATUS_H
