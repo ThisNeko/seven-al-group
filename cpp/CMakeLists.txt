@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
 
 set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+ENABLE_LANGUAGE(CXX)
+set (THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
 project(al-car)
 
@@ -26,3 +30,5 @@ add_executable(al-car
     src/io/driver_interface.hpp
     src/io/driver_interface.cpp
     src/utils/communication_channel.hpp)
+
+target_link_libraries(al-car Threads::Threads)
