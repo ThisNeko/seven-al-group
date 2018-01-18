@@ -11,4 +11,8 @@ add_executable(al-car
     src/lead_analyzer.hpp
     src/main.cpp
     src/traffic_lights_analyzer.cpp
-    src/traffic_lights_analyzer.hpp)
+    src/traffic_lights_analyzer.hpp
+    src/io/broadcaster_wifi.hpp
+    src/io/broadcaster_wifi.cpp
+    src/io/receptor_wifi.hpp
+    src/io/receptor_wifi.cpp)
