@@ -3,5 +3,6 @@ package main
 import "../../src/wifi"
 
 func main(){
-	wifi.StartWifi()
+	shutdownChan := make(chan struct{})
+	wifi.StartWifi(shutdownChan)
 }
