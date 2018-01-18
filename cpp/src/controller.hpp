@@ -4,6 +4,7 @@
 #include <list>
 #include "structs/car_status.hpp"
 #include "structs/traffic_light_status.hpp"
+#include "utils/communication_channel.hpp"
 
 class Controller {
     public:

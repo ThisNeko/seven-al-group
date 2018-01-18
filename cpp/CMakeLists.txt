@@ -24,4 +24,5 @@ add_executable(al-car
     src/io/car_interface.hpp
     src/io/car_interface.cpp
     src/io/driver_interface.hpp
-    src/io/driver_interface.cpp)
+    src/io/driver_interface.cpp
+    src/utils/communication_channel.hpp)
