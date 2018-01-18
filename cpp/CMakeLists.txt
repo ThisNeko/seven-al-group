@@ -3,10 +3,13 @@ cmake_minimum_required(VERSION 3.1)
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 ENABLE_LANGUAGE(CXX)
+
 set (THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
 project(al-car)
+
+include_directories(src)
 
 add_executable(al-car 
     src/controller.cpp
