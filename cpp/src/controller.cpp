@@ -22,11 +22,11 @@ void Controller::ControllerLoop()
         Directions directions;
         if (!ComputeDrivingDirections(directions, m_carStatus, selectedLead, selectedTrafficLight))
         {
-            PrintToDriver("No directions to give. Drive as you want!");
+            PrintToDriver("> Controller: No directions to give. Drive as you want!\n");
         }
         else
         {
-            PrintToDriver("Directions found but not printable yet. Come back later!");
+            PrintToDriver("> Controller: Directions found but not printable yet. Come back later!\n");
         }
 
         sleep(1); 
