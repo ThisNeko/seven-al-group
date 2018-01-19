@@ -19,7 +19,7 @@ void Broadcaster_wifi::broadcast()
     int opt = 1;
     int addrlen = sizeof(address);
     char buffer[1024] = {0};
-    char *hello = "Hello from server";
+    char *hello = "Hello from Brodcast";
 
     printf("coucou je broadcast\n");
       
@@ -66,9 +66,10 @@ void Broadcaster_wifi::broadcast()
     for(;;){
 
     	valread = read( new_socket , buffer, 1024);
-    	printf("Server : %s\n",buffer );
+    	printf("Broadcast : %s\n",buffer );
     	send(new_socket , hello , strlen(hello) , 0 );
     	printf("Hello message sent\n");
+        sleep(1);
     }
     
 }
