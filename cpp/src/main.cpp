@@ -2,12 +2,15 @@
 #include <thread>
 #include "io/broadcaster_wifi.hpp"
 #include "io/receptor_wifi.hpp"
-#include <iostream>
+#include "utils/json.hpp"
 
+#include <iostream>
 #include <utility>
 #include <atomic>
 #include <functional>
 #include <chrono>
+
+using json = nlohmann::json;
 
 void start_controller()
 {
@@ -51,6 +54,8 @@ int main(){
     std::thread threadWifiBroadcaster(start_wifi_broadcaster);
 	std::thread threadWifiReceiver(start_wifi_receiver);
 	std::thread threadCarInterface(start_car_interface);
+
+	json j;
 
 	//std::thread t3(test,0);
 

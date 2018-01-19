@@ -32,6 +32,7 @@ add_executable(al-car
     src/io/car_interface.cpp
     src/io/driver_interface.hpp
     src/io/driver_interface.cpp
-    src/utils/communication_channel.hpp)
+    src/utils/communication_channel.hpp
+    src/utils/json.hpp)
 
 target_link_libraries(al-car Threads::Threads)
