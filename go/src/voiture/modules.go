@@ -104,26 +104,11 @@ func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Condu
 		feux := reg.GetAllFeux()
 		status := stat.Get()
 
-		/*if len(feux) > 0 {
-			temps:=feux[0].Ticker
-			println(temps)
-			X1 := feux[0].Position.X
-			Y1 := feux[0].Position.Y
-			println(X1)
-			X2 := status.Position.X
-			Y2 := status.Position.Y
-			println(X2)
-			distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
-			println(distance)
-			vitesse := distance/float64(temps)
-			println(vitesse)
-			conducteur.VitesseFeu(vitesse)
-		}*/
 		for _,f := range feux{
 			time:=f.Timer - f.Ticker
 			var vitesse float64
 
-			if f.Couleur.String()=="RED"{
+			if f.Couleur.String()=="YELLOW"{
 				temps := time
 				X1 := f.Position.X
 				Y1 := f.Position.Y

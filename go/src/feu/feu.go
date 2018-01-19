@@ -11,7 +11,7 @@ func NewFeu(ip string) {
 	rand.Seed(time.Now().UTC().UnixNano())
 	feu := Feu{
 		ID: rand.Int(),
-		Position: Position{0,0},
+		Position: Position{100,0},
 		Couleur: Couleur(1),
 		Ticker: 0,
 	}
