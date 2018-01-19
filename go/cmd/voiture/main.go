@@ -28,7 +28,7 @@ func main(){
 		ID: rand.Int(),
 		Vitesse: 80,
 		Position: voiture.Position{X,Y},
-		Frein: false,
+		Panne: false,
 	}
 
 	log.Println(mat)
@@ -46,6 +46,9 @@ func main(){
 		case "a\n":
 			mat.Vitesse = 80
 			log.Println("Vitesse = 80")
+		case "p\n":
+			mat.Panne = !mat.Panne
+			log.Printf("Panne = %t",mat.Panne)
 		}
 	}
 }

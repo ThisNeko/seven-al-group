@@ -26,6 +26,45 @@ func (mods *ModuleDispatcher) Notify(){
 
 type ModuleNotifier chan struct{}
 
+
+func modulePanne(panne ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur){
+	lead := 0
+	for{
+		<- panne
+		voitures := reg.GetAllVoiture()
+		status := stat.Get()
+		lead = findLead(status,voitures)
+		if lead >= 0 && voitures[lead].Panne {
+			conducteur.PanneLead()
+		}
+		<- time.After(time.Second)
+	}
+}
+
+func findLead(status StatusVoiture, voitures map[int]StatusVoiture) int {
+	maxX := status.Position.X + 100
+	minX := status.Position.X
+	minY := status.Position.Y - 1
+	maxY := status.Position.Y + 1
+	nearestX := maxX
+	lead := -1
+	for _,v := range voitures{
+		x := v.Position.X
+		y := v.Position.Y
+		if x > minX && x < nearestX && y > minY && y < maxY {
+			lead = v.ID
+			nearestX = x
+		}
+	}
+	return lead
+}
+
+func NewModulePanne(reg *Registre, stat *Status, conducteur Conducteur) ModuleNotifier{
+	panne := make(ModuleNotifier,1)
+	go modulePanne(panne, reg, stat, conducteur)
+	return panne
+}
+
 func moduleFrein(frein ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur){
 	for {
 		<- frein

@@ -20,7 +20,7 @@ type StatusVoiture struct{
 	ID int
 	Vitesse Vitesse
 	Position Position
-	Frein bool
+	Panne bool
 }
 
 type Status struct{
@@ -47,7 +47,7 @@ func StatusLoop(stat Status, mods *ModuleDispatcher, conn *connection){
 				ID:mat.ID,
 				Vitesse:Vitesse{mat.Vitesse,0},
 				Position:Position{mat.Position.X,mat.Position.Y},
-				Frein:mat.Frein,
+				Panne:mat.Panne,
 			}
 			mods.Notify()
 			conn.Broadcast(status)

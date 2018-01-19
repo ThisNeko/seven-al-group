@@ -6,7 +6,7 @@ type Materiel struct {
 	ID int
 	Vitesse float64
 	Position Position
-	Frein bool
+	Panne bool
 }
 
 func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func(d time.Duration) <- chan time.Time) {
@@ -22,6 +22,8 @@ func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func
 	mods.AddModule(frein)
 	feu := NewModuleFeu(&reg,&stat, conducteur)
 	mods.AddModule(feu)
+	panne := NewModulePanne(&reg,&stat,conducteur)
+	mods.AddModule(panne)
 
 	for{
 		<- after(50 * time.Millisecond)
