@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#define PORT 8080
+#define PORT 1234
 
 Receptor_wifi::Receptor_wifi(){}
 
@@ -16,7 +16,9 @@ void Receptor_wifi::receptor()
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    char *hello = "Hello from receptor";
+   // char *hello = "Hello from receptor";
+    char *hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\\\"ID\\\":9113953410437231233,\\\"Vitesse\\\":{\\\"X\\\":80,\\\"Y\\\":0},\\\"Position\\\":{\\\"X\\\":-20,\\\"Y\\\":0},\\\"Panne\\\":false}\"}\n";
+
     char buffer[1024] = {0};
 
     printf("coucou\n");
@@ -45,10 +47,10 @@ void Receptor_wifi::receptor()
     }
 
     for(;;){
-    	send(sock , hello , strlen(hello) , 0 );
-    	printf("Hello message sent\n");
-    	valread = read( sock , buffer, 1024);
-    	printf("Receptor : %s\n",buffer );
+    	int rez = send(sock , hello , strlen(hello) , 0 );
+    	printf("Hello message sent %d\n", rez);
+    	//valread = read( sock , buffer, 1024);
+    	//printf("Receptor : %s\n",buffer );
         sleep(1);
     }
 

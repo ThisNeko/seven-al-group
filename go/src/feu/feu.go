@@ -14,6 +14,7 @@ func NewFeu(ip string) {
 		Position: Position{10,0},
 		Couleur: Couleur(1),
 		Ticker: 0,
+		Timer: 10
 	}
 
 	log.Println(feu)
@@ -33,7 +34,7 @@ func NewFeu(ip string) {
 		go func() {
 			select {
 			case <-tickerChan:
-				if feu.Ticker == 10 {
+				if feu.Ticker == feu.Timer {
 					feu.Ticker = 0
 					if b {
 						feu.Couleur = feu.Couleur + 2

@@ -108,7 +108,7 @@ func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Condu
 			time:=f.Timer - f.Ticker
 			var vitesse float64
 
-			if f.Couleur.String()=="YELLOW"{
+			if f.Couleur.String()=="RED"{
 				temps := time
 				X1 := f.Position.X
 				Y1 := f.Position.Y
