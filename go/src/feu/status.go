@@ -11,8 +11,8 @@ const (
 
 var couleurs = [...]string {
 	"GREEN",
-	"RED",
 	"YELLOW",
+	"RED",
 }
 
 type Feu struct {
