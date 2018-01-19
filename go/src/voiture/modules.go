@@ -116,6 +116,10 @@ func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Condu
 				Y2 := status.Position.Y
 				distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
 				vitesseT := (distance/1000)/(float64(temps)/3600)
+				//log.Println("vitesseT = %d",int(vitesseT))
+				if vitesseT < -100000 {
+					vitesseT = 50
+				}
 
 				if vitesseT > 50{//si je ne peux pas avoir le prochain feu vert alors j'aurais celui d'après
 					temps := time + (f.Timer*2)
@@ -125,7 +129,13 @@ func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Condu
 					Y2 := status.Position.Y
 					distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
 					vitesse = (distance/1000)/(float64(temps)/3600)
-				} else{
+					//log.Println("vitesse = %d",int(vitesseT))
+					if vitesse > 100000 {
+						vitesse = 50
+					} else{
+						vitesseT = vitesse
+					}
+				}else{
 					vitesse = vitesseT
 				}
 
@@ -137,7 +147,10 @@ func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Condu
 				Y2 := status.Position.Y
 				distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
 				vitesseT := (distance/1000)/(float64(temps)/3600)
-
+				if vitesse < 100000 {
+					vitesse = 50
+				}
+				//log.Println("vitesseT = %d",int(vitesseT))
 				if vitesseT > 50{//si je ne peux pas avoir le prochain feu vert alors j'aurais celui d'après
 					temps := time + f.Timer
 					X1 := f.Position.X
@@ -146,12 +159,20 @@ func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Condu
 					Y2 := status.Position.Y
 					distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
 					vitesse = (distance/1000)/(float64(temps)/3600)
-				} else{
+					if vitesse > 100000 {
+						vitesse = 50
+					}
+					vitesseT = vitesse
+				}else{
 					vitesse = vitesseT
 				}
 			}
 
-			conducteur.VitesseFeu(-vitesse,f)
+			if vitesse < 0{
+				conducteur.VitesseFeu(-vitesse,f)
+			}else {
+				conducteur.VitesseFeu(vitesse,f)
+			}
 		}
 
 		<- time.After(time.Second)
