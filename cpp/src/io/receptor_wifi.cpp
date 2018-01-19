@@ -16,7 +16,7 @@ void Receptor_wifi::receptor()
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    char *hello = "Hello from client";
+    char *hello = "Hello from receptor";
     char buffer[1024] = {0};
 
     printf("coucou\n");
@@ -48,7 +48,8 @@ void Receptor_wifi::receptor()
     	send(sock , hello , strlen(hello) , 0 );
     	printf("Hello message sent\n");
     	valread = read( sock , buffer, 1024);
-    	printf("Client : %s\n",buffer );
+    	printf("Receptor : %s\n",buffer );
+        sleep(1);
     }
 
 }
