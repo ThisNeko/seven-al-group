@@ -19,7 +19,8 @@ void Broadcaster_wifi::broadcast()
     int opt = 1;
     int addrlen = sizeof(address);
     char buffer[1024] = {0};
-    char *hello = "Hello from Brodcast";
+    //char *hello = "Hello from Brodcast";
+    char *hello = "{type :  \"VOITURE\", message : \"{id : 1543543, vitesse : { x : 0.0, y : 0.0 }, position : { x : 0.0, y : 0.0 }, panne : false}\"}";
 
     printf("coucou je broadcast\n");
       
@@ -65,8 +66,8 @@ void Broadcaster_wifi::broadcast()
 
     for(;;){
 
-    	valread = read( new_socket , buffer, 1024);
-    	printf("Broadcast : %s\n",buffer );
+    	//valread = read( new_socket , buffer, 1024);
+    	//printf("Broadcast : %s\n",buffer );
     	send(new_socket , hello , strlen(hello) , 0 );
     	printf("Hello message sent\n");
         sleep(1);
