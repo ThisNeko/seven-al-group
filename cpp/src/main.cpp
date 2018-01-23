@@ -9,6 +9,7 @@
 #include <atomic>
 #include <functional>
 #include <chrono>
+#include <unistd.h>
 
 using json = nlohmann::json;
 
@@ -18,25 +19,17 @@ void start_controller()
 	controller.ControllerLoop();
 }
 
-
-void f1(Broadcaster_wifi * b)
-{
-	b->broadcast();
-}
-
-void f2(Receptor_wifi * r)
-{
-	r->receptor();
-}
-
 void start_wifi_broadcaster()
 {
-
+	Broadcaster_wifi broadcaster;
+	usleep(1000000);
+	broadcaster.BroadcasterLoop();
 }
 
 void start_wifi_receiver()
 {
-
+	Receptor_wifi receptor;
+	receptor.ReceptorLoop();
 }
 
 void start_car_interface()
@@ -45,37 +38,15 @@ void start_car_interface()
 }
 
 int main(){
-	/*std::thread threadController(start_controller);
+	std::thread threadController(start_controller);
     std::thread threadWifiBroadcaster(start_wifi_broadcaster);
 	std::thread threadWifiReceiver(start_wifi_receiver);
-	std::thread threadCarInterface(start_car_interface);*/
+	std::thread threadCarInterface(start_car_interface);
 
-
-	//std::thread t3(test,0);
-
-	//threadController.join();
-	//threadWifiBroadcaster.join();
-	//threadWifiReceiver.join();
-	//threadCarInterface.join();
-
-
-	static Broadcaster_wifi broadcaster;
-	static Receptor_wifi receptor;
-
-	std::thread t1(f1,&broadcaster);
-	//std::thread t2(f2,&receptor);
-
-	//t1.join();
-	//t2.join();
-	/*threadController.join();
+	threadController.join();
 	threadWifiBroadcaster.join();
 	threadWifiReceiver.join();
-	threadCarInterface.join();*/
-	t1.join();
-	//t2.join();
+	threadCarInterface.join();
 
-
-
-
-	//return 0;
+	return 0;
 }

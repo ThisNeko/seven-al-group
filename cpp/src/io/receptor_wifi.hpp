@@ -6,7 +6,7 @@ class Receptor_wifi
 {
 public:
 	Receptor_wifi();
-	void receptor();
+	void ReceptorLoop();
 
 };
 

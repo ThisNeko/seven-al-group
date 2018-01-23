@@ -16,23 +16,18 @@ using json = nlohmann::json;
 Receptor_wifi::Receptor_wifi(){}
 
   
-void Receptor_wifi::receptor()
+void Receptor_wifi::ReceptorLoop()
 {
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-   // char *hello = "Hello from receptor";
-    char *hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\\\"ID\\\":9113953410437231233,\\\"Vitesse\\\":{\\\"X\\\":80,\\\"Y\\\":0},\\\"Position\\\":{\\\"X\\\":-20,\\\"Y\\\":0},\\\"Panne\\\":false}\"}\n";
+    std::string hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\\\"ID\\\":9113953410437231233,\\\"Vitesse\\\":{\\\"X\\\":80,\\\"Y\\\":0},\\\"Position\\\":{\\\"X\\\":-20,\\\"Y\\\":0},\\\"Panne\\\":false}\"}\n";
     
-
-    printf("coucou\n");
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
         return;
     }
-  
-    memset(&serv_addr, '0', sizeof(serv_addr));
   
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
@@ -53,13 +48,11 @@ void Receptor_wifi::receptor()
     for(;;){
         char buffer[1024] = {0};
     	valread = read( sock , buffer, 1024);
-    	//printf("Receptor : %s\n",buffer);
         if (json::accept(buffer)){    
             auto j = json::parse(buffer);
-        //printf(j.dump())
             std::cout << j.dump() << std::endl;
         }
-        //sleep(1);
+        usleep(50000);
     }
 
 }
