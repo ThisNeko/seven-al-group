@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <iostream>
-#define PORT 8080
+#define PORT 1234
 
 Broadcaster_wifi::Broadcaster_wifi(){}
 
@@ -20,7 +20,6 @@ void Broadcaster_wifi::broadcast()
    // char *hello = "Hello from receptor";
     char *hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\\\"ID\\\":9113953410437231233,\\\"Vitesse\\\":{\\\"X\\\":80,\\\"Y\\\":0},\\\"Position\\\":{\\\"X\\\":-20,\\\"Y\\\":0},\\\"Panne\\\":false}\"}\n";
 
-    char buffer[1024] = {0};
 
     printf("coucou\n");
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -49,10 +48,10 @@ void Broadcaster_wifi::broadcast()
 
     for(;;){
         int rez = send(sock , hello , strlen(hello) , 0 );
-        printf("Hello message sent %d\n", rez);
+        //printf("Hello message sent %d\n", rez);
         //valread = read( sock , buffer, 1024);
         //printf("Receptor : %s\n",buffer );
-        sleep(1);
+        //sleep(1);
     }
     
 }

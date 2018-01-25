@@ -45,12 +45,11 @@ void start_car_interface()
 }
 
 int main(){
-	std::thread threadController(start_controller);
+	/*std::thread threadController(start_controller);
     std::thread threadWifiBroadcaster(start_wifi_broadcaster);
 	std::thread threadWifiReceiver(start_wifi_receiver);
-	std::thread threadCarInterface(start_car_interface);
+	std::thread threadCarInterface(start_car_interface);*/
 
-	json j;
 
 	//std::thread t3(test,0);
 
@@ -64,16 +63,16 @@ int main(){
 	static Receptor_wifi receptor;
 
 	std::thread t1(f1,&broadcaster);
-	std::thread t2(f2,&receptor);
+	//std::thread t2(f2,&receptor);
 
 	//t1.join();
 	//t2.join();
-	threadController.join();
+	/*threadController.join();
 	threadWifiBroadcaster.join();
 	threadWifiReceiver.join();
-	threadCarInterface.join();
+	threadCarInterface.join();*/
 	t1.join();
-	t2.join();
+	//t2.join();
 
 
 
