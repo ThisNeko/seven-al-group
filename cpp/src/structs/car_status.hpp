@@ -9,7 +9,7 @@ typedef struct {
 typedef struct {
     int X = 0;
     int Y = 0;
-} Speed;
+} Vitesse;
 
 typedef struct {
     int X = 0;
@@ -18,9 +18,8 @@ typedef struct {
 
 typedef struct {
     Position position;
-    Speed speed;
-    Acceleration acceleration;
-    bool brakes;
+    Vitesse vitesse;
+    bool panne;
     int ID;
 } CarStatus;
 

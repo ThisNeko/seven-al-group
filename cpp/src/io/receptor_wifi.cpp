@@ -47,10 +47,8 @@ void Receptor_wifi::receptor()
     }
 
     for(;;){
-    	int rez = send(sock , hello , strlen(hello) , 0 );
-    	printf("Hello message sent %d\n", rez);
-    	//valread = read( sock , buffer, 1024);
-    	//printf("Receptor : %s\n",buffer );
+    	valread = read( sock , buffer, 1024);
+    	printf("Receptor : %s\n",buffer );
         sleep(1);
     }
 

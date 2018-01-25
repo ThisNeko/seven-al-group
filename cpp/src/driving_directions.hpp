@@ -6,6 +6,6 @@
 #include "structs/traffic_light_status.hpp"
 #include "structs/directions.hpp"
 
-bool ComputeDrivingDirections(Directions &directions, const CarStatus &carStatus, CarStatus const *lead, TrafficLightStatus const *trafficLight);
+bool ComputeDrivingDirections( const CarStatus &carStatus, CarStatus const *lead, TrafficLightStatus const *trafficLight);
 
 #endif // DRIVING_DIRECTIONS_H

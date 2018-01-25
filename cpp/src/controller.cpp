@@ -20,7 +20,7 @@ void Controller::ControllerLoop()
         TrafficLightStatus *selectedTrafficLight = SelectTrafficLight(m_trafficLightsRegistry, m_carStatus);
 
         Directions directions;
-        if (!ComputeDrivingDirections(directions, m_carStatus, selectedLead, selectedTrafficLight))
+        if (!ComputeDrivingDirections(m_carStatus, selectedLead, selectedTrafficLight))
         {
             PrintToDriver("> Controller: No directions to give. Drive as you want!\n");
         }
