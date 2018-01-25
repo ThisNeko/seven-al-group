@@ -18,11 +18,6 @@ void start_controller()
 	controller.ControllerLoop();
 }
 
-void test(int n){
-	for(;;){
-		n++;
-	}
-}
 
 void f1(Broadcaster_wifi * b)
 {

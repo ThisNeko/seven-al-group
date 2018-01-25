@@ -6,6 +6,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <iostream>
+#include "utils/json.hpp"
+
+// for convenience
+using json = nlohmann::json;
 #define PORT 1234
 
 Receptor_wifi::Receptor_wifi(){}
@@ -18,8 +23,7 @@ void Receptor_wifi::receptor()
     struct sockaddr_in serv_addr;
    // char *hello = "Hello from receptor";
     char *hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\\\"ID\\\":9113953410437231233,\\\"Vitesse\\\":{\\\"X\\\":80,\\\"Y\\\":0},\\\"Position\\\":{\\\"X\\\":-20,\\\"Y\\\":0},\\\"Panne\\\":false}\"}\n";
-
-    char buffer[1024] = {0};
+    
 
     printf("coucou\n");
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -47,9 +51,15 @@ void Receptor_wifi::receptor()
     }
 
     for(;;){
+        char buffer[1024] = {0};
     	valread = read( sock , buffer, 1024);
-    	printf("Receptor : %s\n",buffer );
-        sleep(1);
+    	//printf("Receptor : %s\n",buffer);
+        if (json::accept(buffer)){    
+            auto j = json::parse(buffer);
+        //printf(j.dump())
+            std::cout << j.dump() << std::endl;
+        }
+        //sleep(1);
     }
 
 }
