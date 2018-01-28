@@ -1,4 +1,4 @@
-#include"receptor_wifi.hpp"
+#include "receptor_wifi.hpp"
 #include <stdio.h>
 #include <sys/socket.h>
 #include <stdlib.h>
@@ -16,13 +16,12 @@ using json = nlohmann::json;
 Receptor_wifi::Receptor_wifi(){}
 
   
-void Receptor_wifi::ReceptorLoop()
+void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chan)
 {
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    std::string hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\\\"ID\\\":9113953410437231233,\\\"Vitesse\\\":{\\\"X\\\":80,\\\"Y\\\":0},\\\"Position\\\":{\\\"X\\\":-20,\\\"Y\\\":0},\\\"Panne\\\":false}\"}\n";
-    
+  
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -50,6 +49,7 @@ void Receptor_wifi::ReceptorLoop()
     	valread = read( sock , buffer, 1024);
         if (json::accept(buffer)){    
             auto j = json::parse(buffer);
+            chan->put(JSONToCarStatus(j));
             std::cout << j.dump() << std::endl;
         }
         usleep(50000);

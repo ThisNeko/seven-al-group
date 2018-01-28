@@ -7,15 +7,15 @@
 #include "structs/directions.hpp"
 #include "io/driver_interface.hpp"
 
-Controller::Controller()
-{
-    
-}
-
 void Controller::ControllerLoop()
 {   
     for (;;)
     {
+        while (!chanReceiver->isEmpty())
+        {
+            
+        }
+        
         CarStatus *selectedLead = SelectLead(m_carsRegistry, m_carStatus);
         TrafficLightStatus *selectedTrafficLight = SelectTrafficLight(m_trafficLightsRegistry, m_carStatus);
 

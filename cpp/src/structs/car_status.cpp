@@ -1,0 +1,13 @@
+#include "car_status.hpp"
+
+using nlohmann::json;
+
+CarStatus JSONToCarStatus(json data){
+    CarStatus carStatus;
+    carStatus.position.X = data["Position"]["X"];
+    carStatus.position.Y = data["Position"]["Y"];
+    carStatus.vitesse.X = data["Vitesse"]["X"];
+    carStatus.vitesse.Y = data["Vitesse"]["Y"];
+
+    return carStatus;
+}

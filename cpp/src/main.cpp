@@ -2,6 +2,7 @@
 #include <thread>
 #include "io/broadcaster_wifi.hpp"
 #include "io/receptor_wifi.hpp"
+#include "utils/communication_channel.hpp"
 #include "utils/json.hpp"
 
 #include <iostream>
@@ -13,9 +14,9 @@
 
 using json = nlohmann::json;
 
-void start_controller()
+void start_controller(CommunicationChannel<CarStatus> *chanControllerBroadcaster, CommunicationChannel<CarStatus> *chanControllerReceiver/* , CommunicationChannel chanControllerCar */)
 {
-	Controller controller;
+	Controller controller(chanControllerBroadcaster, chanControllerReceiver);
 	controller.ControllerLoop();
 }
 
@@ -26,10 +27,10 @@ void start_wifi_broadcaster()
 	broadcaster.BroadcasterLoop();
 }
 
-void start_wifi_receiver()
+void start_wifi_receiver(CommunicationChannel<CarStatus> *chanControllerReceiver)
 {
 	Receptor_wifi receptor;
-	receptor.ReceptorLoop();
+	receptor.ReceptorLoop(chanControllerReceiver);
 }
 
 void start_car_interface()
@@ -38,9 +39,12 @@ void start_car_interface()
 }
 
 int main(){
-	std::thread threadController(start_controller);
+	CommunicationChannel<CarStatus> *chanControllerBroadcaster = new CommunicationChannel<CarStatus>();
+	CommunicationChannel<CarStatus> *chanControllerReceiver = new CommunicationChannel<CarStatus>;
+	// chanControllerCar;
+	std::thread threadController(start_controller, chanControllerBroadcaster, chanControllerReceiver);
     std::thread threadWifiBroadcaster(start_wifi_broadcaster);
-	std::thread threadWifiReceiver(start_wifi_receiver);
+	std::thread threadWifiReceiver(start_wifi_receiver, chanControllerReceiver);
 	std::thread threadCarInterface(start_car_interface);
 
 	threadController.join();

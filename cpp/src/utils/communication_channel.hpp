@@ -17,6 +17,11 @@ class CommunicationChannel {
             m_queue.push_back(e);
             m_condition_variable.notify_one();
         }
+        bool isEmpty()
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            return m_queue.empty();
+        }
         T get()
         {
             std::unique_lock<std::mutex> lock(m_mutex);
