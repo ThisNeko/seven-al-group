@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include "utils/json.hpp"
+#include <algorithm>
 
 // for convenience
 using json = nlohmann::json;
@@ -47,10 +48,20 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chan)
     for(;;){
         char buffer[1024] = {0};
     	valread = read( sock , buffer, 1024);
-        if (json::accept(buffer)){    
-            auto j = json::parse(buffer);
-            chan->put(JSONToCarStatus(j));
-            std::cout << j.dump() << std::endl;
+        if (json::accept(buffer)){
+            std::string str(buffer);
+            auto j = json::parse(str);
+            if (j["TypeEnum"] == "VOITURE")
+            {
+                str = j["Info"].dump();
+                str.erase(std::remove(str.begin(), str.end(), '\\'), str.end());
+                str.erase(0, 1);
+                str.erase(str.size() - 1);
+                j = json::parse(str);
+                std::cout << j.dump() << std::endl;
+                CarStatus s = JSONToCarStatus(j);
+                chan->put(s);
+            }
         }
         usleep(50000);
     }

@@ -5,7 +5,7 @@ class Broadcaster_wifi
 {
 public:
 	Broadcaster_wifi();
-	void BroadcasterLoop();
+	void BroadcasterLoop(CommunicationChannel<CarStatus> *chan);
 
 };
 

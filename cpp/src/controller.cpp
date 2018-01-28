@@ -13,7 +13,9 @@ void Controller::ControllerLoop()
     {
         while (!chanReceiver->isEmpty())
         {
-            
+            CarStatus carStatus = chanReceiver->get();
+            m_carsRegistry[carStatus.ID] = carStatus;
+            // m_carsRegistry.put(chanReceiver->get());
         }
         
         CarStatus *selectedLead = SelectLead(m_carsRegistry, m_carStatus);

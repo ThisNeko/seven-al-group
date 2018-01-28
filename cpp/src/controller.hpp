@@ -14,6 +14,7 @@ class Controller {
     private:
         CarStatus m_carStatus;
         std::map<int, CarStatus> m_carsRegistry;
+        std::map<int, int> m_timeouts;
         std::map<int, TrafficLightStatus> m_trafficLightsRegistry;
         CommunicationChannel<CarStatus> *chanBroadcaster;
         CommunicationChannel<CarStatus> *chanReceiver;

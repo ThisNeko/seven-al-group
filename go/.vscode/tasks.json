@@ -8,6 +8,12 @@
             "type"          : "shell",
             "command"       : "go run cmd/wifi/main.go",
             "problemMatcher": []
+        },
+        {
+            "label"         : "GoCar",
+            "type"          : "shell",
+            "command"       : "go run cmd/voiture/main.go 100 0",
+            "problemMatcher": []
         }
     ]
 }
