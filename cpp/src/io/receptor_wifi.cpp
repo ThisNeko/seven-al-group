@@ -58,7 +58,6 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chan)
                 str.erase(0, 1);
                 str.erase(str.size() - 1);
                 j = json::parse(str);
-                std::cout << j.dump() << std::endl;
                 CarStatus s = JSONToCarStatus(j);
                 chan->put(s);
             }

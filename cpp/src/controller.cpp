@@ -9,6 +9,8 @@
 
 void Controller::ControllerLoop()
 {   
+    m_carStatus.position.X = 91;
+    m_carStatus.vitesse.X = 80;
     for (;;)
     {
         while (!chanReceiver->isEmpty())
