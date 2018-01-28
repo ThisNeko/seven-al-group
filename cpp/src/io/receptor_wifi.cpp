@@ -63,7 +63,6 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chan)
                 chan->put(s);
             }
         }
-        usleep(50000);
     }
 
 }

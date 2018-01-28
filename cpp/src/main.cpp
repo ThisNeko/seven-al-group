@@ -20,11 +20,11 @@ void start_controller(CommunicationChannel<CarStatus> *chanControllerBroadcaster
 	controller.ControllerLoop();
 }
 
-void start_wifi_broadcaster()
+void start_wifi_broadcaster(CommunicationChannel<CarStatus> *chanControllerBroadcaster)
 {
 	Broadcaster_wifi broadcaster;
 	usleep(1000000);
-	broadcaster.BroadcasterLoop();
+	broadcaster.BroadcasterLoop(chanControllerBroadcaster);
 }
 
 void start_wifi_receiver(CommunicationChannel<CarStatus> *chanControllerReceiver)
@@ -43,7 +43,7 @@ int main(){
 	CommunicationChannel<CarStatus> *chanControllerReceiver = new CommunicationChannel<CarStatus>;
 	// chanControllerCar;
 	std::thread threadController(start_controller, chanControllerBroadcaster, chanControllerReceiver);
-    std::thread threadWifiBroadcaster(start_wifi_broadcaster);
+    std::thread threadWifiBroadcaster(start_wifi_broadcaster, chanControllerBroadcaster);
 	std::thread threadWifiReceiver(start_wifi_receiver, chanControllerReceiver);
 	std::thread threadCarInterface(start_car_interface);
 
