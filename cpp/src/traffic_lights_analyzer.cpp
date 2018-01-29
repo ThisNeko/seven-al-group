@@ -1,7 +1,7 @@
 #include "traffic_lights_analyzer.hpp"
 #include "io/driver_interface.hpp"
 
-TrafficLightStatus* SelectTrafficLight(const std::list <TrafficLightStatus> trafficLightsRegistry, const CarStatus &carStatus)
+TrafficLightStatus* SelectTrafficLight(const std::map <int, TrafficLightStatus> trafficLightsRegistry, const CarStatus &carStatus)
 {
     TrafficLightStatus *selected = nullptr;
 

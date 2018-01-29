@@ -103,9 +103,11 @@ func (user user) getMessage(message chan string, disconnect chan struct{}) {
 		disconnect <- struct{}{}
 		return
 	}
-	//log.Println(user.conn.RemoteAddr().String() + " sent : " + line)
+	log.Println(user.conn.RemoteAddr().String() + " sent : " + line)
 	message <- line
 }
+
+
 
 func handleConnection(pool *userPool, conn net.Conn) {
 	defer conn.Close()

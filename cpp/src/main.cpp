@@ -2,43 +2,35 @@
 #include <thread>
 #include "io/broadcaster_wifi.hpp"
 #include "io/receptor_wifi.hpp"
-#include <iostream>
+#include "utils/communication_channel.hpp"
+#include "utils/json.hpp"
 
+#include <iostream>
 #include <utility>
 #include <atomic>
 #include <functional>
 #include <chrono>
+#include <unistd.h>
 
-void start_controller()
+using json = nlohmann::json;
+
+void start_controller(CommunicationChannel<CarStatus> *chanControllerBroadcaster, CommunicationChannel<CarStatus> *chanControllerReceiver/* , CommunicationChannel chanControllerCar */)
 {
-	Controller controller;
+	Controller controller(chanControllerBroadcaster, chanControllerReceiver);
 	controller.ControllerLoop();
 }
 
-void test(int n){
-	for(;;){
-		n++;
-	}
+void start_wifi_broadcaster(CommunicationChannel<CarStatus> *chanControllerBroadcaster)
+{
+	Broadcaster_wifi broadcaster;
+	usleep(1000000);
+	broadcaster.BroadcasterLoop(chanControllerBroadcaster);
 }
 
-void f1(Broadcaster_wifi * b)
+void start_wifi_receiver(CommunicationChannel<CarStatus> *chanControllerReceiver)
 {
-	b->broadcast();
-}
-
-void f2(Receptor_wifi * r)
-{
-	r->receptor();
-}
-
-void start_wifi_broadcaster()
-{
-
-}
-
-void start_wifi_receiver()
-{
-
+	Receptor_wifi receptor;
+	receptor.ReceptorLoop(chanControllerReceiver);
 }
 
 void start_car_interface()
@@ -47,36 +39,18 @@ void start_car_interface()
 }
 
 int main(){
-	std::thread threadController(start_controller);
-    std::thread threadWifiBroadcaster(start_wifi_broadcaster);
-	std::thread threadWifiReceiver(start_wifi_receiver);
+	CommunicationChannel<CarStatus> *chanControllerBroadcaster = new CommunicationChannel<CarStatus>();
+	CommunicationChannel<CarStatus> *chanControllerReceiver = new CommunicationChannel<CarStatus>;
+	// chanControllerCar;
+	std::thread threadController(start_controller, chanControllerBroadcaster, chanControllerReceiver);
+    std::thread threadWifiBroadcaster(start_wifi_broadcaster, chanControllerBroadcaster);
+	std::thread threadWifiReceiver(start_wifi_receiver, chanControllerReceiver);
 	std::thread threadCarInterface(start_car_interface);
 
-	//std::thread t3(test,0);
-
-	//threadController.join();
-	//threadWifiBroadcaster.join();
-	//threadWifiReceiver.join();
-	//threadCarInterface.join();
-
-
-	static Broadcaster_wifi broadcaster;
-	static Receptor_wifi receptor;
-
-	std::thread t1(f1,&broadcaster);
-	std::thread t2(f2,&receptor);
-
-	//t1.join();
-	//t2.join();
 	threadController.join();
 	threadWifiBroadcaster.join();
 	threadWifiReceiver.join();
 	threadCarInterface.join();
-	t1.join();
-	t2.join();
 
-
-
-
-	//return 0;
+	return 0;
 }

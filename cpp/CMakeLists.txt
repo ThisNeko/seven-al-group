@@ -22,6 +22,7 @@ add_executable(al-car
     src/traffic_lights_analyzer.cpp
     src/traffic_lights_analyzer.hpp
     src/structs/car_status.hpp
+    src/structs/car_status.cpp
     src/structs/traffic_light_status.hpp
     src/structs/directions.hpp
     src/io/broadcaster_wifi.hpp
@@ -32,6 +33,7 @@ add_executable(al-car
     src/io/car_interface.cpp
     src/io/driver_interface.hpp
     src/io/driver_interface.cpp
-    src/utils/communication_channel.hpp)
+    src/utils/communication_channel.hpp
+    src/utils/json.hpp)
 
 target_link_libraries(al-car Threads::Threads)
