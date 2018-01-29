@@ -97,88 +97,70 @@ func NewModuleFrein(reg *Registre, stat *Status, conducteur Conducteur) ModuleNo
 	go moduleFrein(frein, reg, stat, conducteur)
 	return frein
 }
-//Pour le moment on admet qu'il n'y a qu'un seul feu
-func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur){
+
+func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur) {
 	for {
+		<- time.After(time.Second)
 		<- feu
 		feux := reg.GetAllFeux()
 		status := stat.Get()
 
 		for _,f := range feux{
-			time:=f.Timer - f.Ticker
-			var vitesse float64
+			vitesseVoiture := status.Vitesse
+			tempsEcoule:=f.Ticker
+			//log.Println("tempsRestant",f.Timer-tempsEcoule)
+			tempsFeuTotal := float64(f.Timer)
+			//log.Println("tempsFeuTotal",f.Timer)
+			X1 := f.Position.X
+			Y1 := f.Position.Y
+			X2 := status.Position.X
+			Y2 := status.Position.Y
+			//distance en metre
+			distanceFeuVoiture := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
+			//log.Println("distanceFeuVoiture = ",distanceFeuVoiture)
+			//log.Println("La couleur du feu est = ",f.Couleur.String())
+			//temps en s
+			tempsVoitureArriveFeu := (distanceFeuVoiture)/(vitesseVoiture.X/3.6)
+			//log.Println("tempsVoitureFeu = ",tempsVoitureFeu)
+			//log.Println("tempsVoitureArriveFeu = ",tempsVoitureArriveFeu)
+			modulo := math.Mod(tempsVoitureArriveFeu+float64(tempsEcoule),2*tempsFeuTotal)
+			//log.Println("modulo = ",modulo)
+			if f.Couleur.String() == "RED"{
+				if modulo <= tempsFeuTotal{
+					//mod := math.Mod(tempsVoitureArriveFeu,tempsFeuTotal)
+					nouvelleVitesse := int(distanceFeuVoiture)/int((tempsVoitureArriveFeu + (tempsFeuTotal- modulo)))
+					conducteur.VitesseFeu(float64(nouvelleVitesse)*3.6,f)
 
-			if f.Couleur.String()=="YELLOW"{
-				temps := time
-				X1 := f.Position.X
-				Y1 := f.Position.Y
-				X2 := status.Position.X
-				Y2 := status.Position.Y
-				distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
-				vitesseT := (distance/1000)/(float64(temps)/3600)
-				//log.Println("vitesseT = %d",int(vitesseT))
-				if vitesseT < -100000 {
-					vitesseT = 50
-				}
-
-				if vitesseT > 50{//si je ne peux pas avoir le prochain feu vert alors j'aurais celui d'après
-					temps := time + (f.Timer*2)
-					X1 := f.Position.X
-					Y1 := f.Position.Y
-					X2 := status.Position.X
-					Y2 := status.Position.Y
-					distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
-					vitesse = (distance/1000)/(float64(temps)/3600)
-					//log.Println("vitesse = %d",int(vitesseT))
-					if vitesse > 100000 {
-						vitesse = 50
-					} else{
-						vitesseT = vitesse
-					}
 				}else{
-					vitesse = vitesseT
+					//log.Println("la couleur est rouge et la voiture va arriver au vert donc on fait rien")
 				}
-
-			} else if f.Couleur.String()=="GREEN"{//je calcul la vitesse pour le prochain feu vert
-				temps:= time
-				X1 := f.Position.X
-				Y1 := f.Position.Y
-				X2 := status.Position.X
-				Y2 := status.Position.Y
-				distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
-				vitesseT := (distance/1000)/(float64(temps)/3600)
-				if vitesse < 100000 {
-					vitesse = 50
-				}
-				//log.Println("vitesseT = %d",int(vitesseT))
-				if vitesseT > 50{//si je ne peux pas avoir le prochain feu vert alors j'aurais celui d'après
-					temps := time + f.Timer
-					X1 := f.Position.X
-					Y1 := f.Position.Y
-					X2 := status.Position.X
-					Y2 := status.Position.Y
-					distance := math.Sqrt(math.Pow(X2-X1,2)+math.Pow(Y2-Y1,2))
-					vitesse = (distance/1000)/(float64(temps)/3600)
-					if vitesse > 100000 {
-						vitesse = 50
-					}
-					vitesseT = vitesse
+			}else{
+				if modulo <= tempsFeuTotal{
+					//log.Println("La couleur est GREEN et on fait rien")
 				}else{
-					vitesse = vitesseT
+					//log.Println("la couleur est VERTE et la voiture va arriver au rouge")
+					nouvelleVitesse := int(distanceFeuVoiture)/int(tempsVoitureArriveFeu+ (2*tempsFeuTotal-(modulo+1)))
+					conducteur.VitesseFeu(float64(nouvelleVitesse)*3.6,f)
 				}
-			}
 
-			if vitesse < 0{
-				conducteur.VitesseFeu(-vitesse,f)
-			}else {
-				conducteur.VitesseFeu(vitesse,f)
 			}
+			//log.Println()
 		}
-
-		<- time.After(time.Second)
 	}
 }
+//test :
+/*
+distance feu-voiture : 200m
+vitesse voiture : 80km/h => 22.2m/s
+temps voiture pour aller au feu a 22.2m/s = 9sec => arrive au rouge
 
+resultat :
+25 km/h = 6.9m/s ; le couleur GREEN et va changer de couleur dans 7 sec
+temps = 28.98sec
+resultat attendu = 17sec
+v = d/t = 200/17 = 11.76m/s = 42.35km/h
+
+ */
 func NewModuleFeu(reg *Registre, stat *Status, conducteur Conducteur) ModuleNotifier{
 	feu := make(ModuleNotifier,1)
 	go moduleFeu(feu, reg, stat, conducteur)
