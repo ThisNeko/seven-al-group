@@ -5,8 +5,8 @@
 
 typedef enum couleur
 {
+	GREEN = 1,
 	RED,
-	GREEN,
 	YELLOW
 	
 } Couleur;
@@ -19,5 +19,7 @@ typedef struct{
 	int timer;
 
 } TrafficLightStatus;
+
+TrafficLightStatus JSONToTrafficLightStatus(json data);
 
 #endif // TRAFFIC_LIGHT_STATUS_H
