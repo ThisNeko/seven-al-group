@@ -53,10 +53,7 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chan)
             auto j = json::parse(str);
             if (j["TypeEnum"] == "VOITURE")
             {
-                str = j["Info"].dump();
-                str.erase(std::remove(str.begin(), str.end(), '\\'), str.end());
-                str.erase(0, 1);
-                str.erase(str.size() - 1);
+                str = j["Info"];
                 j = json::parse(str);
                 CarStatus s = JSONToCarStatus(j);
                 chan->put(s);
