@@ -13,11 +13,10 @@ void Controller::ControllerLoop()
     m_carStatus.vitesse.X = 80;
     for (;;)
     {
-        while (!chanReceiver->isEmpty())
+        while (!chanReceiverCar->isEmpty())
         {
-            CarStatus carStatus = chanReceiver->get();
+            CarStatus carStatus = chanReceiverCar->get();
             m_carsRegistry[carStatus.ID] = carStatus;
-            // m_carsRegistry.put(chanReceiver->get());
         }
         
         CarStatus *selectedLead = SelectLead(m_carsRegistry, m_carStatus);

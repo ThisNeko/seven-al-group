@@ -4,7 +4,6 @@ using nlohmann::json;
 
 CarStatus JSONToCarStatus(json data){
     CarStatus carStatus;
-    int i = data["Position"]["X"];
     carStatus.position.X = data["Position"]["X"];
     carStatus.position.Y = data["Position"]["Y"];
     carStatus.vitesse.X = data["Vitesse"]["X"];

@@ -10,6 +10,8 @@
 #include "utils/json.hpp"
 #include <algorithm>
 
+#include "structs/traffic_light_status.hpp"
+
 // for convenience
 using json = nlohmann::json;
 #define PORT 1234
@@ -17,7 +19,7 @@ using json = nlohmann::json;
 Receptor_wifi::Receptor_wifi(){}
 
   
-void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chan)
+void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, CommunicationChannel<TrafficLightStatus> *chanTrafficLight)
 {
     struct sockaddr_in address;
     int sock = 0, valread;
@@ -56,7 +58,14 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chan)
                 str = j["Info"];
                 j = json::parse(str);
                 CarStatus s = JSONToCarStatus(j);
-                chan->put(s);
+                chanCar->put(s);
+            }
+            else if (j["TypeEnum"] == "FEU")
+            {
+                str = j["Info"];
+                j = json::parse(str);
+                TrafficLightStatus s = JSONToTrafficLightStatus(j);
+                chanTrafficLight->put(s);
             }
         }
     }

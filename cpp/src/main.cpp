@@ -14,9 +14,10 @@
 
 using json = nlohmann::json;
 
-void start_controller(CommunicationChannel<CarStatus> *chanControllerBroadcaster, CommunicationChannel<CarStatus> *chanControllerReceiver/* , CommunicationChannel chanControllerCar */)
+void start_controller(CommunicationChannel<CarStatus> *chanControllerBroadcaster, CommunicationChannel<CarStatus> *chanControllerReceiverCar,
+					  CommunicationChannel<TrafficLightStatus> *chanControllerReceiverTrafficLight)
 {
-	Controller controller(chanControllerBroadcaster, chanControllerReceiver);
+	Controller controller(chanControllerBroadcaster, chanControllerReceiverCar, chanControllerReceiverTrafficLight);
 	controller.ControllerLoop();
 }
 
@@ -27,10 +28,11 @@ void start_wifi_broadcaster(CommunicationChannel<CarStatus> *chanControllerBroad
 	broadcaster.BroadcasterLoop(chanControllerBroadcaster);
 }
 
-void start_wifi_receiver(CommunicationChannel<CarStatus> *chanControllerReceiver)
+void start_wifi_receiver(CommunicationChannel<CarStatus> *chanControllerReceiverCar,
+						 CommunicationChannel<TrafficLightStatus> *chanControllerReceiverTrafficLight)
 {
 	Receptor_wifi receptor;
-	receptor.ReceptorLoop(chanControllerReceiver);
+	receptor.ReceptorLoop(chanControllerReceiverCar, chanControllerReceiverTrafficLight);
 }
 
 void start_car_interface()
@@ -40,11 +42,12 @@ void start_car_interface()
 
 int main(){
 	CommunicationChannel<CarStatus> *chanControllerBroadcaster = new CommunicationChannel<CarStatus>();
-	CommunicationChannel<CarStatus> *chanControllerReceiver = new CommunicationChannel<CarStatus>;
+	CommunicationChannel<CarStatus> *chanControllerReceiverCar = new CommunicationChannel<CarStatus>;
+	CommunicationChannel<TrafficLightStatus> *chanControllerReceiverTrafficLight = new CommunicationChannel<TrafficLightStatus>;
 	// chanControllerCar;
-	std::thread threadController(start_controller, chanControllerBroadcaster, chanControllerReceiver);
+	std::thread threadController(start_controller, chanControllerBroadcaster, chanControllerReceiverCar, chanControllerReceiverTrafficLight);
     std::thread threadWifiBroadcaster(start_wifi_broadcaster, chanControllerBroadcaster);
-	std::thread threadWifiReceiver(start_wifi_receiver, chanControllerReceiver);
+	std::thread threadWifiReceiver(start_wifi_receiver, chanControllerReceiverCar, chanControllerReceiverTrafficLight);
 	std::thread threadCarInterface(start_car_interface);
 
 	threadController.join();
