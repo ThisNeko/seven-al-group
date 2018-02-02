@@ -1,4 +1,4 @@
-#include"receptor_wifi.hpp"
+#include "receptor_wifi.hpp"
 #include <stdio.h>
 #include <sys/socket.h>
 #include <stdlib.h>
@@ -8,6 +8,7 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include "utils/json.hpp"
+#include <algorithm>
 
 // for convenience
 using json = nlohmann::json;
@@ -16,13 +17,12 @@ using json = nlohmann::json;
 Receptor_wifi::Receptor_wifi(){}
 
   
-void Receptor_wifi::ReceptorLoop()
+void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chan)
 {
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    std::string hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\\\"ID\\\":9113953410437231233,\\\"Vitesse\\\":{\\\"X\\\":80,\\\"Y\\\":0},\\\"Position\\\":{\\\"X\\\":-20,\\\"Y\\\":0},\\\"Panne\\\":false}\"}\n";
-    
+  
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -48,11 +48,20 @@ void Receptor_wifi::ReceptorLoop()
     for(;;){
         char buffer[1024] = {0};
     	valread = read( sock , buffer, 1024);
-        if (json::accept(buffer)){    
-            auto j = json::parse(buffer);
-            std::cout << j.dump() << std::endl;
+        if (json::accept(buffer)){
+            std::string str(buffer);
+            auto j = json::parse(str);
+            if (j["TypeEnum"] == "VOITURE")
+            {
+                str = j["Info"].dump();
+                str.erase(std::remove(str.begin(), str.end(), '\\'), str.end());
+                str.erase(0, 1);
+                str.erase(str.size() - 1);
+                j = json::parse(str);
+                CarStatus s = JSONToCarStatus(j);
+                chan->put(s);
+            }
         }
-        usleep(50000);
     }
 
 }

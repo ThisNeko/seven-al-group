@@ -1,5 +1,6 @@
 #include "driving_directions.hpp"
 #include "io/driver_interface.hpp"
+#include <iostream>
 
 bool ComputeDrivingDirections(const CarStatus &carStatus, CarStatus const *lead, TrafficLightStatus const *trafficLight)
 {

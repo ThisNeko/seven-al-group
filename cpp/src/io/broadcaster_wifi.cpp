@@ -13,12 +13,12 @@
 Broadcaster_wifi::Broadcaster_wifi(){}
 
 
-void Broadcaster_wifi::BroadcasterLoop()
+void Broadcaster_wifi::BroadcasterLoop(CommunicationChannel<CarStatus> *chan)
 {
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    std::string hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\\\"ID\\\":9113953410437231233,\\\"Vitesse\\\":{\\\"X\\\":80,\\\"Y\\\":0},\\\"Position\\\":{\\\"X\\\":-20,\\\"Y\\\":0},\\\"Panne\\\":false}\"}\n";
+    std::string hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\"ID\":9113953410437231233,\"Vitesse\":{\"X\":80,\"Y\":0},\"Position\":{\"X\":-20,\"Y\":0},\\\"Panne\":false}\"}\n";
 
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {

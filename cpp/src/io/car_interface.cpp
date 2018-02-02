@@ -1,6 +1,6 @@
 #include "io/car_interface.hpp"
 
-void CarInterfaceLoop(CommunicationChannel<CarStatus> channel)
+void CarInterfaceLoop(CommunicationChannel<CarStatus> *channel)
 {
     
 }
