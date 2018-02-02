@@ -14,8 +14,8 @@ type message struct{
 		Info string
 }
 
-func NewMessage(status Status) StatusVoiture {
-	return StatusVoiture(status.Get())
+func NewMessage(status Data) StatusVoiture {
+	return StatusVoiture(status.GetStatus())
 }
 
 type connection struct{
@@ -60,7 +60,7 @@ func receive(conn net.Conn) message {
 
 //goroutine du receiver
 //qui lit les messages reçus et fais des choses avec
-func (c connection) receiverLoop(reg *Registre){
+func (c connection) receiverLoop(reg *Data){
 
 	for{
 		mess := receive(c.conn)
@@ -102,8 +102,13 @@ func (c connection) Broadcast(inf StatusVoiture){
 	}
 }
 
+func (c connection) Start(reg *Data){
+	go c.broadcastLoop()
+	go c.receiverLoop(reg)
+}
+
 //créé un connection
-func NewConnection(ip string, reg *Registre) connection{
+func NewConnection(ip string) connection{
 	conn, err := net.Dial("tcp", ip)
 	if err != nil {
 		log.Fatal(err)
@@ -114,7 +119,5 @@ func NewConnection(ip string, reg *Registre) connection{
 		conn: conn,
 		info: make(chan message, 1),
 	}
-	go c.broadcastLoop()
-	go c.receiverLoop(reg)
 	return c
 }

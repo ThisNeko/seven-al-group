@@ -27,49 +27,30 @@ func (mods *ModuleDispatcher) Notify(){
 type ModuleNotifier chan struct{}
 
 
-func modulePanne(panne ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur){
-	lead := 0
+func modulePanne(panne ModuleNotifier, reg *Data, conducteur Conducteur){
 	for{
 		<- panne
-		voitures := reg.GetAllVoiture()
-		status := stat.Get()
-		lead = findLead(status,voitures)
-		if lead >= 0 && voitures[lead].Panne {
+		lead := reg.GetLead()
+		if lead.ID > -1 && lead.Panne {
 			conducteur.PanneLead()
 		}
 		<- time.After(time.Second)
 	}
 }
 
-func findLead(status StatusVoiture, voitures map[int]StatusVoiture) int {
-	maxX := status.Position.X + 100
-	minX := status.Position.X
-	minY := status.Position.Y - 1
-	maxY := status.Position.Y + 1
-	nearestX := maxX
-	lead := -1
-	for _,v := range voitures{
-		x := v.Position.X
-		y := v.Position.Y
-		if x > minX && x < nearestX && y > minY && y < maxY {
-			lead = v.ID
-			nearestX = x
-		}
-	}
-	return lead
-}
 
-func NewModulePanne(reg *Registre, stat *Status, conducteur Conducteur) ModuleNotifier{
+
+func NewModulePanne(reg *Data, conducteur Conducteur) ModuleNotifier{
 	panne := make(ModuleNotifier,1)
-	go modulePanne(panne, reg, stat, conducteur)
+	go modulePanne(panne, reg, conducteur)
 	return panne
 }
 
-func moduleFrein(frein ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur){
+func moduleFrein(frein ModuleNotifier, reg *Data, conducteur Conducteur){
 	for {
 		<- frein
 		voitures := reg.GetAllVoiture()
-		status := stat.Get()
+		status := reg.GetStatus()
 		futurePos := Position{
 			status.Position.X+status.Vitesse.X,
 			status.Position.Y+status.Vitesse.Y,
@@ -92,17 +73,17 @@ func moduleFrein(frein ModuleNotifier, reg *Registre, stat *Status, conducteur C
 	}
 }
 
-func NewModuleFrein(reg *Registre, stat *Status, conducteur Conducteur) ModuleNotifier{
+func NewModuleFrein(reg *Data, conducteur Conducteur) ModuleNotifier{
 	frein := make(ModuleNotifier,1)
-	go moduleFrein(frein, reg, stat, conducteur)
+	go moduleFrein(frein, reg, conducteur)
 	return frein
 }
 //Pour le moment on admet qu'il n'y a qu'un seul feu
-func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur){
+func moduleFeu(feu ModuleNotifier, reg *Data, conducteur Conducteur){
 	for {
 		<- feu
 		feux := reg.GetAllFeux()
-		status := stat.Get()
+		status := reg.GetStatus()
 
 		for _,f := range feux{
 			time:=f.Timer - f.Ticker
@@ -179,8 +160,8 @@ func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Condu
 	}
 }
 
-func NewModuleFeu(reg *Registre, stat *Status, conducteur Conducteur) ModuleNotifier{
+func NewModuleFeu(reg *Data, conducteur Conducteur) ModuleNotifier{
 	feu := make(ModuleNotifier,1)
-	go moduleFeu(feu, reg, stat, conducteur)
+	go moduleFeu(feu, reg, conducteur)
 	return feu
 }
