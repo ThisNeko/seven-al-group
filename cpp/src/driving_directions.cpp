@@ -1,6 +1,5 @@
 #include "driving_directions.hpp"
 #include "io/driver_interface.hpp"
-#include <iostream>
 
 bool ComputeDrivingDirections(const CarStatus &carStatus, CarStatus const *lead, TrafficLightStatus const *trafficLight)
 {
@@ -10,6 +9,12 @@ bool ComputeDrivingDirections(const CarStatus &carStatus, CarStatus const *lead,
         return false;
     }
 
+    if (lead == nullptr)
+    {
+        PrintToDriver("Driving directions with only a traffic light isnt implemented yet.");
+        return false;
+    }
+    
     Position currentPos = carStatus.position;
     Vitesse vitesse = carStatus.vitesse;
 

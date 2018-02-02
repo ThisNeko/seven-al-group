@@ -9,6 +9,7 @@ CarStatus* SelectLead(std::map<int, CarStatus> &carsRegistry, const CarStatus &c
     {
         selected = &(it->second);
     }
+    
     if (selected == nullptr)
     {
         PrintToDriver("> LeadAnalyzer: No lead has been found.");
