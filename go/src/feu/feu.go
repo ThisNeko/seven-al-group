@@ -10,11 +10,11 @@ func NewFeu(ip string) {
 
 	rand.Seed(time.Now().UTC().UnixNano())
 	feu := Feu{
-		ID: rand.Int(),
-		Position: Position{10,0},
-		Couleur: Couleur(1),
-		Ticker: 0,
-		Timer: 10,
+		ID:       rand.Int(),
+		Position: Position{200, 0},
+		Couleur:  Couleur(1),
+		Ticker:   0,
+		Timer:    10,
 	}
 
 	log.Println(feu)
@@ -37,10 +37,10 @@ func NewFeu(ip string) {
 				if feu.Ticker == feu.Timer {
 					feu.Ticker = 0
 					if b {
-						feu.Couleur = feu.Couleur + 2
+						feu.Couleur = feu.Couleur + 1
 						b = false
 					} else {
-						feu.Couleur = feu.Couleur - 2
+						feu.Couleur = feu.Couleur - 1
 						b = true
 					}
 				} else {
