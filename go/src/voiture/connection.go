@@ -7,15 +7,31 @@ import (
 	"fmt"
 	"math/rand"
 	"bufio"
+	//"time"
 )
 
 type message struct{
-		TypeEnum string
-		Info string
+	TypeEnum string
+	Info string
 }
 
-func NewMessage(status Data) StatusVoiture {
-	return StatusVoiture(status.GetStatus())
+type InfoVoiture struct{
+	ID int
+	Vitesse Vitesse
+	Position Position
+	Panne bool
+	//Timestamp int64
+}
+
+func NewMessage(status Data) InfoVoiture {
+	s := status.GetStatus()
+	return InfoVoiture{
+		s.ID,
+		s.Vitesse,
+		s.Position,
+		s.Panne,
+		//time.Now().UTC().UnixNano()
+		}
 }
 
 type connection struct{
@@ -64,12 +80,16 @@ func (c connection) receiverLoop(reg *Data){
 
 	for{
 		mess := receive(c.conn)
+		//timestamp := time.Now().UTC().UnixNano()
 		//log.Println("Received:")
 		//log.Println(mess)
 		if mess.TypeEnum=="VOITURE"{
-			var mat StatusVoiture
+			var mat InfoVoiture
 			json.Unmarshal([]byte(mess.Info),&mat)
-			reg.UpdateVoiture(mat)
+			//delay := timestamp - mat.Timestamp
+			//log.Printf("Delay : %v ms\n",delay)
+			s := StatusVoiture{mat.ID,mat.Vitesse, mat.Position,mat.Panne}
+			reg.UpdateVoiture(s)
 			//log.Println("La voiture recoit un message d'une autre voiture")
 		}
 		if mess.TypeEnum=="FEU"{
@@ -86,7 +106,7 @@ func (c connection) receiverLoop(reg *Data){
 }
 
 //methode exportée qui met les infos à envoyer dans le channel
-func (c connection) Broadcast(inf StatusVoiture){
+func (c connection) Broadcast(inf InfoVoiture){
 	info, err := json.Marshal(inf)
 	if err != nil {
 		log.Fatal(err)

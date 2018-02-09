@@ -84,19 +84,27 @@ func StatusLoop(status *StatusVoiture, stat *Data, mods *ModuleDispatcher, conn 
 				Panne:mat.Panne,
 			}
 			mods.Notify()
-			conn.Broadcast(*status)
+			info := InfoVoiture{
+				mat.ID,
+				Vitesse{mat.Vitesse,0},
+				Position{mat.Position.X,mat.Position.Y},
+				mat.Panne,
+				//time.Now().UTC().UnixNano(),
+			}
+			conn.Broadcast(info)
 		case response := <- stat.getStatus:
 			response <- *status
 		}
 	}
 }
 
-func TimeoutLoop(mods *ModuleDispatcher, voitures map[int]StatusVoiture, timeouts map[int]time.Time) {
+func TimeoutLoop(mods *ModuleDispatcher, data *Data, timeouts map[int]time.Time) {
 	for{
 		<- time.After(time.Second/2)
 		for i,t := range timeouts {
 			now := time.Now()
 			if now.Sub(t) > time.Second/2 {
+				voitures := data.GetAllVoiture()
 				voiture := voitures[i]
 				voiture.Panne = true
 				voitures[i] = voiture
@@ -106,9 +114,10 @@ func TimeoutLoop(mods *ModuleDispatcher, voitures map[int]StatusVoiture, timeout
 	}
 }
 
-func LeadLoop(status *StatusVoiture, voitures map[int]StatusVoiture, lead *int) {
+func LeadLoop(status *StatusVoiture, data *Data, lead *int) {
 	for{
 		<- time.After(50*time.Millisecond)
+		voitures := data.GetAllVoiture()
 		*lead = findLead(*status,voitures)
 	}
 }
@@ -120,9 +129,9 @@ func (data *Data) Start(mods *ModuleDispatcher, conn *connection){
 	var status StatusVoiture
 	lead := -1
 	go RegisterLoop(data,mods,voitures,feux,timeouts,&lead)
-	go TimeoutLoop(mods,voitures,timeouts)
+	go TimeoutLoop(mods,data,timeouts)
 	go StatusLoop(&status, data, mods, conn)
-	go LeadLoop(&status,voitures,&lead)
+	go LeadLoop(&status,data,&lead)
 }
 
 
