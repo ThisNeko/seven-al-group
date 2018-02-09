@@ -5,6 +5,7 @@ import (
 	"bufio"
 	"log"
 	"time"
+	"math/rand"
 )
 
 type user struct {
@@ -29,14 +30,16 @@ type userPool struct {
 	add    chan user
 	remove chan user
 	cast   chan broadcastMessage
+	loss   float64
 }
 
-func newUserPool() *userPool {
+func newUserPool(loss float64) *userPool {
 	//create a user pool
 	pool := userPool{
 		add:    make(chan user),
 		remove: make(chan user),
 		cast:  	make(chan broadcastMessage),
+		loss:	loss,
 	}
 
 	go userManagement(&pool)
@@ -47,6 +50,7 @@ func newUserPool() *userPool {
 func userManagement(pool *userPool) {
 	//goroutine that manages interactions with the user pool
 	var users []user
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for {
 		select {
 		case u := <-pool.add:
@@ -65,7 +69,9 @@ func userManagement(pool *userPool) {
 				if u.conn == user.conn {
 					continue
 				}
-				u.send(message)
+				if r.Float64() > pool.loss {
+					u.send(message)
+				}
 			}
 		}
 	}
@@ -103,7 +109,7 @@ func (user user) getMessage(message chan string, disconnect chan struct{}) {
 		disconnect <- struct{}{}
 		return
 	}
-	log.Println(user.conn.RemoteAddr().String() + " sent : " + line)
+	log.Print(user.conn.RemoteAddr().String() + " sent : " + line)
 	message <- line
 }
 
@@ -145,14 +151,15 @@ func handleConnection(pool *userPool, conn net.Conn) {
 	}
 }
 
-func StartWifi(shutdownChan chan struct{}) {
+func StartWifi(shutdownChan chan struct{}, loss float64) {
 	listener, err := net.Listen("tcp", "localhost:1234")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pool := newUserPool()
+	pool := newUserPool(loss)
 	log.Println("Server localhost:1234 ready.")
+	log.Printf("Packet loss probability: %v",loss)
 
 	acceptChannel := make(chan *net.Conn)
 

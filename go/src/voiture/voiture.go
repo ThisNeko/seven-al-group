@@ -13,21 +13,24 @@ func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func
 
 	mods := NewModuleDispatcher()
 
-	reg := NewRegistre(&mods)
-	conn := NewConnection(ip,&reg)
-	stat := NewStatus(&mods,&conn)
+	data := NewData()
+	conn := NewConnection(ip)
+	//stat := NewStatus(&mods,&conn)
+
+	data.Start(&mods,&conn)
+	conn.Start(&data)
 
 
-	frein := NewModuleFrein(&reg,&stat, conducteur)
+	frein := NewModuleFrein(&data, conducteur)
 	mods.AddModule(frein)
-	feu := NewModuleFeu(&reg,&stat, conducteur)
+	feu := NewModuleFeu(&data, conducteur)
 	mods.AddModule(feu)
-	panne := NewModulePanne(&reg,&stat,conducteur)
+	panne := NewModulePanne(&data,conducteur)
 	mods.AddModule(panne)
 
 	for{
 		<- after(50 * time.Millisecond)
-		stat.Update(*materiel)
-		conn.Broadcast(NewMessage(stat))
+		data.UpdateStatus(*materiel)
+		conn.Broadcast(NewMessage(data))
 	}
 }

@@ -5,6 +5,6 @@
 #include "structs/traffic_light_status.hpp"
 #include "structs/car_status.hpp"
 
-TrafficLightStatus* SelectTrafficLight(const std::map <int, TrafficLightStatus> trafficLightsRegistry, const CarStatus &carStatus);
+TrafficLightStatus* SelectTrafficLight(std::map <int, TrafficLightStatus> &trafficLightsRegistry, const CarStatus &carStatus);
 
 #endif // TRAFFIC_LIGHTS_ANALYZER_H

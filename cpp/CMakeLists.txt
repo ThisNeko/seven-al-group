@@ -24,6 +24,7 @@ add_executable(al-car
     src/structs/car_status.hpp
     src/structs/car_status.cpp
     src/structs/traffic_light_status.hpp
+    src/structs/traffic_light_status.cpp
     src/structs/directions.hpp
     src/io/broadcaster_wifi.hpp
     src/io/broadcaster_wifi.cpp

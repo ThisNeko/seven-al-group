@@ -5,6 +5,7 @@
 #include "lead_analyzer.hpp"
 #include "traffic_lights_analyzer.hpp"
 #include "structs/directions.hpp"
+#include "structs/traffic_light_status.hpp"
 #include "io/driver_interface.hpp"
 
 void Controller::ControllerLoop()
@@ -13,17 +14,23 @@ void Controller::ControllerLoop()
     m_carStatus.vitesse.X = 80;
     for (;;)
     {
-        while (!chanReceiver->isEmpty())
+        while (!chanReceiverCar->isEmpty())
         {
-            CarStatus carStatus = chanReceiver->get();
+            CarStatus carStatus = chanReceiverCar->get();
             m_carsRegistry[carStatus.ID] = carStatus;
-            // m_carsRegistry.put(chanReceiver->get());
+        }
+
+        while (!chanReceiverTrafficLight->isEmpty())
+        {
+            TrafficLightStatus trafficLightStatus = chanReceiverTrafficLight->get();
+            m_trafficLightsRegistry[trafficLightStatus.ID] = trafficLightStatus;
         }
         
         CarStatus *selectedLead = SelectLead(m_carsRegistry, m_carStatus);
         TrafficLightStatus *selectedTrafficLight = SelectTrafficLight(m_trafficLightsRegistry, m_carStatus);
 
         Directions directions;
+
         if (!ComputeDrivingDirections(m_carStatus, selectedLead, selectedTrafficLight))
         {
             PrintToDriver("> Controller: No directions to give. Drive as you want!\n");
