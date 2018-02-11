@@ -25,10 +25,14 @@ public class Frame extends JFrame {
 
     public Frame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 800);
-        setResizable(false);
         setTitle("Interface");
-        init();
+        setSize(800, 800);
+        setVisible(true);
+        setLocationRelativeTo(null);
+        setLayout(new GridLayout(1, 1, 0, 0));
+        s = new Screen();
+        setContentPane(s);
+        
         try {
             socket = new Socket("127.0.0.1", 1234);
         } catch (IOException ex) {
@@ -38,14 +42,6 @@ public class Frame extends JFrame {
         System.out.println("Connexion établie avec le wifi");
         t1 = new Thread(new Connexion(socket, s));
         t1.start();
-    }
-
-    public void init() {
-        setLocationRelativeTo(null);
-        setLayout(new GridLayout(1, 1, 0, 0));
-        s = new Screen();
-        add(s);
-        setVisible(true);
     }
 
     public static void main(String[] args) {

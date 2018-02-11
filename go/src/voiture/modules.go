@@ -79,7 +79,7 @@ func NewModuleFrein(reg *Data, conducteur Conducteur) ModuleNotifier{
 	return frein
 }
 
-func moduleFeu(feu ModuleNotifier, reg *Registre, stat *Status, conducteur Conducteur) {
+func moduleFeu(feu ModuleNotifier, reg *Data, conducteur Conducteur) {
 	for {
 		<- time.After(time.Second)
 		<- feu
@@ -142,7 +142,7 @@ resultat attendu = 17sec
 v = d/t = 200/17 = 11.76m/s = 42.35km/h
 
  */
-func NewModuleFeu(reg *Registre, stat *Status, conducteur Conducteur) ModuleNotifier{
+func NewModuleFeu(reg *Data, conducteur Conducteur) ModuleNotifier{
 	feu := make(ModuleNotifier,1)
 	go moduleFeu(feu, reg, conducteur)
 	return feu
