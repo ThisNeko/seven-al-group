@@ -144,10 +144,10 @@ func handleConnection(pool *userPool, conn net.Conn) {
 				//send the message to every other users
 				pool.broadcast(user, m)
 			}
-		case <-time.After(1 * time.Minute):
+		/*case <-time.After(1 * time.Minute):
 			//disconnect after 1 minute of inactivity
 			log.Println(user.conn.RemoteAddr().String() + " seems to be out. Force disconnection.")
-			return
+			return*/
 		}
 
 	}
