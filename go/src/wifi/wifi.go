@@ -109,7 +109,7 @@ func (user user) getMessage(message chan string, disconnect chan struct{}) {
 		disconnect <- struct{}{}
 		return
 	}
-	log.Print(user.conn.RemoteAddr().String() + " sent : " + line)
+	//log.Print(user.conn.RemoteAddr().String() + " sent : " + line)
 	message <- line
 }
 
@@ -140,8 +140,10 @@ func handleConnection(pool *userPool, conn net.Conn) {
 		case <-disconnect:
 			return
 		case m := <-message:
-			//send the message to every other users
-			pool.broadcast(user, m)
+			if m != "ping\n" {
+				//send the message to every other users
+				pool.broadcast(user, m)
+			}
 		case <-time.After(1 * time.Minute):
 			//disconnect after 1 minute of inactivity
 			log.Println(user.conn.RemoteAddr().String() + " seems to be out. Force disconnection.")
