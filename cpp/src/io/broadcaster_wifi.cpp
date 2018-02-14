@@ -43,7 +43,11 @@ void Broadcaster_wifi::BroadcasterLoop(CommunicationChannel<CarStatus> *chan)
     }
 
     for(;;){
-        int rez = send(sock , hello.c_str() , hello.size() , 0 );
+        CarStatus carStatus = chan->get();
+        json j = CarStatusToJSON(carStatus);
+        std::string str = j.dump();
+        std::cout << str << std::endl;
+        int rez = send(sock , str.c_str() , str.size() , 0 );
         usleep(50000);
     }
     

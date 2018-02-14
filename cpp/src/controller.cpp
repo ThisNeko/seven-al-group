@@ -21,6 +21,8 @@ void Controller::ControllerLoop()
             m_carsRegistry[carStatus.ID] = carStatus;
         }
 
+        chanBroadcaster->put(m_carStatus);
+        m_carStatus.position.X++;
         while (!chanReceiverTrafficLight->isEmpty())
         {
             TrafficLightStatus trafficLightStatus = chanReceiverTrafficLight->get();
