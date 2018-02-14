@@ -14,6 +14,8 @@ include_directories(src)
 add_executable(al-car 
     src/controller.cpp
     src/controller.hpp
+    src/breakdown_analyser.hpp
+    src/breakdown_analyser.cpp
     src/driving_directions.cpp
     src/driving_directions.hpp
     src/lead_analyzer.cpp

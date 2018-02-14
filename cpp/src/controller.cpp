@@ -7,6 +7,7 @@
 #include "structs/directions.hpp"
 #include "structs/traffic_light_status.hpp"
 #include "io/driver_interface.hpp"
+#include "breakdown_analyser.hpp"
 
 void Controller::ControllerLoop()
 {   
@@ -28,6 +29,9 @@ void Controller::ControllerLoop()
         
         CarStatus *selectedLead = SelectLead(m_carsRegistry, m_carStatus);
         TrafficLightStatus *selectedTrafficLight = SelectTrafficLight(m_trafficLightsRegistry, m_carStatus);
+        if(selectedLead!=nullptr){
+            bool lead_panne = analyseLead(m_carStatus,selectedLead);
+        }
 
         Directions directions;
 

@@ -1,5 +1,6 @@
 #include "traffic_lights_analyzer.hpp"
 #include "io/driver_interface.hpp"
+#include <sstream>
 
 TrafficLightStatus* SelectTrafficLight(std::map <int, TrafficLightStatus> &trafficLightsRegistry, const CarStatus &carStatus)
 {
@@ -7,7 +8,12 @@ TrafficLightStatus* SelectTrafficLight(std::map <int, TrafficLightStatus> &traff
 
     for (auto it = trafficLightsRegistry.begin(); it != trafficLightsRegistry.end(); ++it)
     {
-        selected = &(it->second);        
+        selected = &(it->second);
+        //calculVitesse(selected,carStatus);
+        std::ostringstream strs;
+        strs << calculVitesse(selected,carStatus);
+        std::string str = strs.str();
+        PrintToDriver("> Vitesse conseillé : "+str);
     }
 
     if (selected == nullptr)
@@ -51,8 +57,6 @@ double calculVitesse(TrafficLightStatus* tl, const CarStatus &carStatus){
             return (double)nouvelleVitesse*3.6;
         }
     }
-
-
 
 
 }
