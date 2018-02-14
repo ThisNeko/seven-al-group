@@ -10,7 +10,7 @@ import (
 )
 func main(){
 	mat := voiture.Materiel{
-		ID: 1,
+		ID: 2,
 		Vitesse: 80,
 		Position: voiture.Position{X: 100},
 	}

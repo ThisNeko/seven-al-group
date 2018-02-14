@@ -37,20 +37,23 @@ public class Connexion implements Runnable {
 
     @Override
     public void run() {
+        JSONObject jsonObject = null;
+        JSONObject jsonInfo = null;
         while (true) {
             try {
+
                 if (read.ready()) {
                     String etat = read.readLine();
                     if (etat != null) {
 
-                        JSONObject jsonObject = new JSONObject(etat);
-                        JSONObject jsonInfo = new JSONObject(jsonObject.getString("Info"));
+                        jsonObject = new JSONObject(etat);
+                        jsonInfo = new JSONObject(jsonObject.getString("Info"));
+                        System.out.println(jsonInfo.toString());
                         long id = jsonInfo.getLong("ID");
                         int posX = jsonInfo.getJSONObject("Position").getInt("X");
                         int posY = jsonInfo.getJSONObject("Position").getInt("Y");
 
                         List<Voiture> voitures = screen.voitures;
-
                         if (!voitures.isEmpty()) {
                             boolean voitureDansListe = false;
                             for (int j = 0; j < voitures.size(); j++) {
@@ -69,7 +72,7 @@ public class Connexion implements Runnable {
                                 v.setPositionY(posY);
                                 screen.voitures.add(v);
                                 screen.repaint();
-                              
+
                             }
 
                         } else {
@@ -85,7 +88,7 @@ public class Connexion implements Runnable {
             } catch (IOException ex) {
                 Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
         }
     }
 }

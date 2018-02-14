@@ -21,7 +21,9 @@ public class Screen extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        //super.paint(g);
+        super.paint(g);
+        g.setColor(Color.WHITE);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         for (int i = 0; i < voitures.size(); i++) {
             if (!voitures.get(i).isPanneVoiture()) {
                 g.setColor(Color.BLACK);
