@@ -4,17 +4,20 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.JPanel;
 
 public class Screen extends JPanel {
 
-    public List<Voiture> voitures;
-    public List<Feu> feux;
+    public Map<Integer,Voiture> voitures;
+    public Map<Integer,Feu> feux;
 
     public Screen() {
-        voitures = new ArrayList<Voiture>();
-        feux = new ArrayList<Feu>();
+        voitures = new ConcurrentHashMap<>();
+        feux = new ConcurrentHashMap<>();
     }
 
     public int toScreenCoordsX(double posX){
@@ -34,12 +37,12 @@ public class Screen extends JPanel {
         super.paint(g);
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
-        for (int i = 0; i < voitures.size(); i++) {
-            voitures.get(i).draw(g,this);
+        for (Map.Entry<Integer, Voiture> v : voitures.entrySet()) {
+            v.getValue().draw(g,this);
         }
 
-        for (Feu f : feux) {
-            f.draw(g,this);
+        for (Map.Entry<Integer, Feu> f : feux.entrySet()) {
+            f.getValue().draw(g,this);
         }
 
     }

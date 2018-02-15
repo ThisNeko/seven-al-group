@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONObject;
@@ -47,74 +48,50 @@ public class Connexion implements Runnable {
                     if (etat != null) {
                         jsonObject = new JSONObject(etat);
                         String typeEnum = jsonObject.getString("TypeEnum");
+
+                        // VOITURES
                         if (typeEnum.equals("VOITURE")) {
                             jsonInfo = new JSONObject(jsonObject.getString("Info"));
-                            long id = jsonInfo.getLong("ID");
+                            int id = jsonInfo.getInt("ID");
                             int posX = jsonInfo.getJSONObject("Position").getInt("X");
                             int posY = jsonInfo.getJSONObject("Position").getInt("Y");
                             int vitesse = jsonInfo.getJSONObject("Vitesse").getInt("X");
-                            List<Voiture> voitures = screen.voitures;
-                            if (!voitures.isEmpty()) {
-                                boolean voitureDansListe = false;
-                                for (int j = 0; j < voitures.size(); j++) {
-                                    if (voitures.get(j).getId() == id) {
-                                        voitures.get(j).setPositionX(posX);
-                                        voitures.get(j).setPositionY(posY);
-                                        voitures.get(j).setVitesseX(vitesse);
-                                        voitures.get(j).setTimeStamp(System.currentTimeMillis());
-                                        voitureDansListe = true;
-                                    }
-                                }
-
-                                if (voitureDansListe == false) {
-                                    Voiture v = new Voiture();
-                                    v.setId(id);
-                                    v.setPositionX(posX);
-                                    v.setPositionY(posY);
-                                    v.setVitesseX(vitesse);
-                                    v.setTimeStamp(System.currentTimeMillis());
-                                    screen.voitures.add(v);
-                                }
-
-                            } else {
+                            Map<Integer,Voiture> voitures = screen.voitures;
+                            if(voitures.containsKey(id)){
+                                Voiture v = voitures.get(id);
+                                v.setPositionX(posX);
+                                v.setPositionY(posY);
+                                v.setVitesseX(vitesse);
+                                v.setTimeStamp(System.currentTimeMillis());
+                                voitures.replace(id,v);
+                            } else{
                                 Voiture v = new Voiture();
                                 v.setId(id);
                                 v.setPositionX(posX);
                                 v.setPositionY(posY);
                                 v.setVitesseX(vitesse);
                                 v.setTimeStamp(System.currentTimeMillis());
-                                screen.voitures.add(v);
+                                voitures.put(id,v);
                             }
+
+                            // FEUX
                         } else if (typeEnum.equalsIgnoreCase("FEU")) {
                             jsonInfo = new JSONObject(jsonObject.getString("Info"));
                             System.out.println(jsonInfo.toString());
-                            long id = jsonInfo.getLong("ID");
+                            int id = jsonInfo.getInt("ID");
                             int posX = jsonInfo.getJSONObject("Position").getInt("X");
                             int posY = jsonInfo.getJSONObject("Position").getInt("Y");
                             int couleur = jsonInfo.getInt("Couleur");
                             int timer = jsonInfo.getInt("Ticker");
 
-                            List<Feu> feux = screen.feux;
-                            if (!feux.isEmpty()) {
-                                boolean feuDansListe = false;
-                                for (int j = 0; j < feux.size(); j++) {
-                                    if (feux.get(j).getId() == id) {
-                                        feux.get(j).setCouleur(couleur);
-                                        feux.get(j).setTimer(timer);
-                                        feuDansListe = true;
-                                    }
-                                }
-
-                                if (feuDansListe == false) {
-                                    Feu f = new Feu();
-                                    f.setId(id);
-                                    f.setPositionX(posX);
-                                    f.setPositionY(posY);
-                                    f.setCouleur(couleur);
-                                    f.setTimer(timer);
-                                    screen.feux.add(f);
-                                }
-
+                            Map<Integer,Feu> feux = screen.feux;
+                            if(feux.containsKey(id)){
+                                Feu f = feux.get(id);
+                                f.setPositionX(posX);
+                                f.setPositionY(posY);
+                                f.setCouleur(couleur);
+                                f.setTimer(timer);
+                                feux.replace(id,f);
                             } else {
                                 Feu f = new Feu();
                                 f.setId(id);
@@ -122,17 +99,13 @@ public class Connexion implements Runnable {
                                 f.setPositionY(posY);
                                 f.setCouleur(couleur);
                                 f.setTimer(timer);
-                                screen.feux.add(f);
-
                             }
                         }
                     }
                 } else {
                     Thread.sleep(1);
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
+            } catch (IOException | InterruptedException ex) {
                 Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);
             }
             screen.repaint();

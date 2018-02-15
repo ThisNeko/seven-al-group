@@ -225,7 +225,7 @@ func moduleVitesse(module ModuleNotifier, data *Data, conducteur Conducteur){
 		feux := data.GetAllFeux()
 		status := data.GetStatus()
 		lead := data.GetLead()
-		var optimalSpeed float64 = 80
+		var optimalSpeed float64 = 30
 		if len(feux) > 0 {
 			ok, v := getOptimalVitesseFeu(feux[0], status)
 			if ok {
