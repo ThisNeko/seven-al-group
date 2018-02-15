@@ -21,10 +21,8 @@ func NewVoiture(ip string, materiel *Materiel, conducteur Conducteur, after func
 	conn.Start(&data)
 
 
-	frein := NewModuleFrein(&data, conducteur)
-	mods.AddModule(frein)
-	feu := NewModuleFeu(&data, conducteur)
-	mods.AddModule(feu)
+	vitesse := NewModuleVitesse(&data,conducteur)
+	mods.AddModule(vitesse)
 	panne := NewModulePanne(&data,conducteur)
 	mods.AddModule(panne)
 
