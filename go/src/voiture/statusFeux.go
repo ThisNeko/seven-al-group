@@ -24,7 +24,7 @@ type Feu struct {
 }
 
 func (couleur Couleur) String() string {
-	return couleurs[couleur - 1]
+	return couleurs[couleur]
 }
 
 

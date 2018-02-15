@@ -154,8 +154,9 @@ func NewModuleFeu(reg *Data, conducteur Conducteur) ModuleNotifier{
 }
 
 
-func getOptimalVitesseFeu(f Feu, status StatusVoiture) (bool, float64){
+func getOptimalVitesseFeu(f Feu, status StatusVoiture, vitesse float64) (bool, float64){
 	vitesseVoiture := status.Vitesse
+	vitesseVoiture.X = vitesse
 	tempsEcoule:=f.Ticker
 	//log.Println("tempsRestant",f.Timer-tempsEcoule)
 	tempsFeuTotal := float64(f.Timer)
@@ -177,7 +178,7 @@ func getOptimalVitesseFeu(f Feu, status StatusVoiture) (bool, float64){
 	if f.Couleur.String() == "RED"{
 		if modulo <= tempsFeuTotal{
 			//mod := math.Mod(tempsVoitureArriveFeu,tempsFeuTotal)
-			nouvelleVitesse := distanceFeuVoiture/(tempsVoitureArriveFeu + (tempsFeuTotal- modulo))
+			nouvelleVitesse := distanceFeuVoiture/(tempsVoitureArriveFeu + (tempsFeuTotal- modulo+2))
 			//conducteur.VitesseFeu(float64(nouvelleVitesse)*3.6,f)
 			return true, nouvelleVitesse*3.6
 
@@ -191,7 +192,7 @@ func getOptimalVitesseFeu(f Feu, status StatusVoiture) (bool, float64){
 			return false, 0
 		}else{
 			//log.Println("la couleur est VERTE et la voiture va arriver au rouge")
-			nouvelleVitesse := distanceFeuVoiture/(tempsVoitureArriveFeu+ (2*tempsFeuTotal-(modulo+1)))
+			nouvelleVitesse := distanceFeuVoiture/(tempsVoitureArriveFeu+ (2*tempsFeuTotal-(modulo+2)))
 			//conducteur.VitesseFeu(float64(nouvelleVitesse)*3.6,f)
 			return true, nouvelleVitesse*3.6
 		}
@@ -226,8 +227,8 @@ func moduleVitesse(module ModuleNotifier, data *Data, conducteur Conducteur){
 		status := data.GetStatus()
 		lead := data.GetLead()
 		var optimalSpeed float64 = 30
-		if len(feux) > 0 {
-			ok, v := getOptimalVitesseFeu(feux[0], status)
+		for f := range feux {
+			ok, v := getOptimalVitesseFeu(feux[f], status,optimalSpeed)
 			if ok {
 				optimalSpeed = v
 			}

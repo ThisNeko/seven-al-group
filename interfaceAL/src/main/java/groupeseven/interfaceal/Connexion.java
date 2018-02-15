@@ -70,7 +70,7 @@ public class Connexion implements Runnable {
                                 Voiture v = new Voiture();
                                 v.setId(id);
                                 v.setPositionX(posX);
-                                v.setPositionY(posY);
+                                v.setPositionY(posY);       
                                 v.setVitesseX(vitesse);
                                 v.setTimeStamp(System.currentTimeMillis());
                                 v.setPanneVoiture(panne);
@@ -80,7 +80,7 @@ public class Connexion implements Runnable {
                             // FEUX
                         } else if (typeEnum.equalsIgnoreCase("FEU")) {
                             jsonInfo = new JSONObject(jsonObject.getString("Info"));
-                            System.out.println(jsonInfo.toString());
+                            //System.out.println(jsonInfo.toString());
                             int id = jsonInfo.getInt("ID");
                             int posX = jsonInfo.getJSONObject("Position").getInt("X");
                             int posY = jsonInfo.getJSONObject("Position").getInt("Y");
@@ -102,6 +102,7 @@ public class Connexion implements Runnable {
                                 f.setPositionY(posY);
                                 f.setCouleur(couleur);
                                 f.setTimer(timer);
+                                feux.put(id,f);
                             }
                         }
                     }

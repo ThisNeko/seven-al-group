@@ -85,7 +85,10 @@ func (c connection) receiverLoop(reg *Data){
 		//log.Println(mess)
 		if mess.TypeEnum=="VOITURE"{
 			var mat InfoVoiture
-			json.Unmarshal([]byte(mess.Info),&mat)
+			err := json.Unmarshal([]byte(mess.Info),&mat)
+			if err != nil {
+				log.Fatal(err)
+			}
 			//delay := timestamp - mat.Timestamp
 			//log.Printf("Delay : %v ms\n",delay)
 			s := StatusVoiture{mat.ID,mat.Vitesse, mat.Position,mat.Panne}
