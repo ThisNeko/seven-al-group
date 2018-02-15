@@ -39,12 +39,13 @@ public class Frame extends JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         System.out.println("Connexion établie avec le wifi");
         t1 = new Thread(new Connexion(socket, s));
         t2 = new Thread(new Ping(socket));
         t1.start();
         t2.start();
+        
     }
     
     public static void main(String[] args) {

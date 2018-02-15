@@ -30,7 +30,7 @@ public class Ping implements Runnable {
             try {
                 out.println("ping\n");
                 out.flush();
-                Thread.sleep(2000);
+                Thread.sleep(200);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Ping.class.getName()).log(Level.SEVERE, null, ex);
             }

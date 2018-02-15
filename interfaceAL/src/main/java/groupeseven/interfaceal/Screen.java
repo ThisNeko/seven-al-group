@@ -14,7 +14,7 @@ public class Screen extends JPanel {
     private int sizeCarWidht = 100;
     private int sizeCarHeight = 100;
 
-    private int sizeFeuWidht = 20;
+    private int sizeFeuWidht = 30;
     private int sizeFeuHeight = 100;
     Font fonte = new Font("", Font.BOLD, 30);
 
@@ -45,7 +45,7 @@ public class Screen extends JPanel {
                         g.setFont(fonte);
                         g.drawString("" + voitures.get(i).getVitesseX(), (int) (voitures.get(i).getPositionX() + getSizeCarWidht() * 0.40), voitures.get(i).getPositionY() + getSizeCarHeight() / 2);
                     } else {//voiture en c++
-                        g.setColor(Color.RED);
+                        g.setColor(Color.ORANGE);
                         g.fillRect(voitures.get(i).getPositionX() % this.getWidth(), voitures.get(i).getPositionY() % this.getHeight(), getSizeCarWidht(), getSizeCarHeight());
                         g.setColor(Color.WHITE);
                         g.setFont(fonte);
@@ -70,6 +70,10 @@ public class Screen extends JPanel {
                 g.setColor(Color.GREEN);
             }
             g.fillRect(f.getPositionX(), f.getPositionY(), getSizeFeuWidht(), getSizeFeuHeight());
+            g.setColor(Color.BLACK);
+            g.setFont(fonte);
+            g.drawString("" + f.getTimer(), f.getPositionX(), f.getPositionY() + sizeFeuHeight / 2);
+
         }
 
     }

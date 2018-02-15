@@ -14,6 +14,7 @@ public class Feu {
     private int positionX;
     private int positionY;
     private int couleur;
+    private int timer;
 
     /**
      * @return the id
@@ -69,6 +70,20 @@ public class Feu {
      */
     public void setCouleur(int couleur) {
         this.couleur = couleur;
+    }
+
+    /**
+     * @return the timer
+     */
+    public int getTimer() {
+        return timer;
+    }
+
+    /**
+     * @param timer the timer to set
+     */
+    public void setTimer(int timer) {
+        this.timer = timer;
     }
     
 }

@@ -48,14 +48,12 @@ public class Connexion implements Runnable {
                         jsonObject = new JSONObject(etat);
                         String typeEnum = jsonObject.getString("TypeEnum");
                         if (typeEnum.equals("VOITURE")) {
-                            
                             jsonInfo = new JSONObject(jsonObject.getString("Info"));
                             long id = jsonInfo.getLong("ID");
                             int posX = jsonInfo.getJSONObject("Position").getInt("X");
                             int posY = jsonInfo.getJSONObject("Position").getInt("Y");
                             int vitesse = jsonInfo.getJSONObject("Vitesse").getInt("X");
                             List<Voiture> voitures = screen.voitures;
-                            
                             if (!voitures.isEmpty()) {
                                 boolean voitureDansListe = false;
                                 for (int j = 0; j < voitures.size(); j++) {
@@ -69,7 +67,6 @@ public class Connexion implements Runnable {
                                 }
 
                                 if (voitureDansListe == false) {
-                                    System.out.println("LOL");
                                     Voiture v = new Voiture();
                                     v.setId(id);
                                     v.setPositionX(posX);
@@ -90,10 +87,12 @@ public class Connexion implements Runnable {
                             }
                         } else if (typeEnum.equalsIgnoreCase("FEU")) {
                             jsonInfo = new JSONObject(jsonObject.getString("Info"));
+                            System.out.println(jsonInfo.toString());
                             long id = jsonInfo.getLong("ID");
                             int posX = jsonInfo.getJSONObject("Position").getInt("X");
                             int posY = jsonInfo.getJSONObject("Position").getInt("Y");
                             int couleur = jsonInfo.getInt("Couleur");
+                            int timer = jsonInfo.getInt("Ticker");
 
                             List<Feu> feux = screen.feux;
                             if (!feux.isEmpty()) {
@@ -101,6 +100,7 @@ public class Connexion implements Runnable {
                                 for (int j = 0; j < feux.size(); j++) {
                                     if (feux.get(j).getId() == id) {
                                         feux.get(j).setCouleur(couleur);
+                                        feux.get(j).setTimer(timer);
                                         feuDansListe = true;
                                     }
                                 }
@@ -111,6 +111,7 @@ public class Connexion implements Runnable {
                                     f.setPositionX(posX);
                                     f.setPositionY(posY);
                                     f.setCouleur(couleur);
+                                    f.setTimer(timer);
                                     screen.feux.add(f);
                                 }
 
@@ -120,7 +121,9 @@ public class Connexion implements Runnable {
                                 f.setPositionX(posX);
                                 f.setPositionY(posY);
                                 f.setCouleur(couleur);
+                                f.setTimer(timer);
                                 screen.feux.add(f);
+
                             }
                         }
                     }
