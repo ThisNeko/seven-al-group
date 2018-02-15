@@ -27,7 +27,7 @@ func mouvementLoop(materiel * voiture.Materiel, maxSpeed float64){
 		<- time.After(10*time.Millisecond)
 		v := (materiel.Vitesse/3.6)/100.0
 		materiel.Position.X += v
-		log.Println(materiel)
+		//log.Println(materiel)
 	}
 }
 
@@ -79,6 +79,10 @@ func main(){
 		case "p\n":
 			mat.Panne = !mat.Panne
 			log.Printf("Panne = %t",mat.Panne)
+		case "+\n":
+			mat.Position.Y += 1
+		case "-\n":
+			mat.Position.Y -= 1
 		}
 	}
 }

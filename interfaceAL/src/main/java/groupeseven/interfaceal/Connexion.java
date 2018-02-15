@@ -56,6 +56,7 @@ public class Connexion implements Runnable {
                             int posX = jsonInfo.getJSONObject("Position").getInt("X");
                             int posY = jsonInfo.getJSONObject("Position").getInt("Y");
                             int vitesse = jsonInfo.getJSONObject("Vitesse").getInt("X");
+                            boolean panne = jsonInfo.getBoolean("Panne");
                             Map<Integer,Voiture> voitures = screen.voitures;
                             if(voitures.containsKey(id)){
                                 Voiture v = voitures.get(id);
@@ -63,6 +64,7 @@ public class Connexion implements Runnable {
                                 v.setPositionY(posY);
                                 v.setVitesseX(vitesse);
                                 v.setTimeStamp(System.currentTimeMillis());
+                                v.setPanneVoiture(panne);
                                 voitures.replace(id,v);
                             } else{
                                 Voiture v = new Voiture();
@@ -71,6 +73,7 @@ public class Connexion implements Runnable {
                                 v.setPositionY(posY);
                                 v.setVitesseX(vitesse);
                                 v.setTimeStamp(System.currentTimeMillis());
+                                v.setPanneVoiture(panne);
                                 voitures.put(id,v);
                             }
 

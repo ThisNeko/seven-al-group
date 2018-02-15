@@ -46,6 +46,6 @@ func (c ConducteurAuto) PanneLead() {
 }
 
 func (c ConducteurAuto) Vitesse(vitesse float64) {
-	log.Printf("La vitesse recommandée est : %d km/h\n",int(vitesse))
+	//log.Printf("La vitesse recommandée est : %d km/h\n",int(vitesse))
 	c.VitesseChan <- vitesse
 }
