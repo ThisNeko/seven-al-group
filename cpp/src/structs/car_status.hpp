@@ -6,13 +6,13 @@
 using nlohmann::json;
 
 typedef struct {
-    int X = 0;
-    int Y = 0;
+    double X = 0;
+    double Y = 0;
 } Position;
 
 typedef struct {
-    int X = 0;
-    int Y = 0;
+    double X = 0;
+    double Y = 0;
 } Vitesse;
 
 typedef struct CarStatus{
@@ -23,6 +23,6 @@ typedef struct CarStatus{
 } CarStatus;
 
 CarStatus JSONToCarStatus(json data);
-json CarStatusToJSON(CarStatus carStatus);
+json CarStatusToJSON(const CarStatus &carStatus);
 
 #endif // CAR_STATUS_H

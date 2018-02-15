@@ -10,14 +10,11 @@ CarStatus* SelectLead(std::map<int, CarStatus> &carsRegistry, const CarStatus &c
 
     for (auto it = carsRegistry.begin(); it != carsRegistry.end(); ++it)
     {
-        //selected = nullptr;
-        if(it->second.position.X>carStatus.position.X && it->second.position.Y == carStatus.position.Y ){
+        if(it->second.position.X > carStatus.position.X && it->second.position.Y == carStatus.position.Y ){
             selected = &(it->second);
         }
-        cout << "Panne: " << it->second.panne << endl;
 
     }
-    //selected = nullptr;
     if (selected == nullptr)
     {
         PrintToDriver("> LeadAnalyzer: No lead has been found.");

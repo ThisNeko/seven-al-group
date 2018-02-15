@@ -10,15 +10,15 @@
 #include <unistd.h>
 #define PORT 1234
 
+using namespace std;
 Broadcaster_wifi::Broadcaster_wifi(){}
 
 
-void Broadcaster_wifi::BroadcasterLoop(CommunicationChannel<CarStatus> *chan)
+void Broadcaster_wifi::BroadcasterLoop(CarStatus *carStatus)
 {
     struct sockaddr_in address;
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    std::string hello = "{\"TypeEnum\":\"VOITURE\",\"Info\":\"{\"ID\":9113953410437231233,\"Vitesse\":{\"X\":80,\"Y\":0},\"Position\":{\"X\":-20,\"Y\":0},\\\"Panne\":false}\"}\n";
 
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
@@ -43,12 +43,11 @@ void Broadcaster_wifi::BroadcasterLoop(CommunicationChannel<CarStatus> *chan)
     }
 
     for(;;){
-        CarStatus carStatus = chan->get();
-        json j = CarStatusToJSON(carStatus);
+        json j = CarStatusToJSON(*carStatus);
         std::string str = j.dump();
-        std::cout << str << std::endl;
+        // std::cout << str << std::endl;
         int rez = send(sock , str.c_str() , str.size() , 0 );
-        usleep(50000);
+        usleep(20000);
     }
     
 }

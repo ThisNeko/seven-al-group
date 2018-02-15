@@ -1,4 +1,6 @@
 #include "car_status.hpp"
+#include <iostream>
+using namespace std;
 
 using nlohmann::json;
 
@@ -15,7 +17,7 @@ CarStatus JSONToCarStatus(json data)
     return carStatus;
 }
 
-json CarStatusToJSON(CarStatus carStatus)
+json CarStatusToJSON(const CarStatus &carStatus)
 {
     json j;
     j["Position"]["X"] = carStatus.position.X;

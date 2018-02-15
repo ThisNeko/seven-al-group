@@ -12,6 +12,7 @@
 
 #include "structs/traffic_light_status.hpp"
 
+using namespace std;
 // for convenience
 using json = nlohmann::json;
 #define PORT 1234
@@ -57,6 +58,7 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, Commu
             {
                 str = j["Info"];
                 j = json::parse(str);
+                // cout << j << endl;
                 CarStatus s = JSONToCarStatus(j);
                 chanCar->put(s);
             }

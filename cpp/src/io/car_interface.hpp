@@ -3,7 +3,8 @@
 
 #include "utils/communication_channel.hpp"
 #include "structs/car_status.hpp"
+#include "structs/directions.hpp"
 
-void CarInterfaceLoop(CommunicationChannel<CarStatus> *channel);
+void CarInterfaceLoop(CarStatus *carStatus);
 
 #endif // CAR_INTERFACE_H
