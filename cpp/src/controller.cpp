@@ -12,7 +12,9 @@
 void Controller::ControllerLoop()
 {   
     m_carStatus.position.X = 91;
+    m_carStatus.position.Y = 0;
     m_carStatus.vitesse.X = 80;
+    int count = 10;
     for (;;)
     {
 
@@ -22,6 +24,15 @@ void Controller::ControllerLoop()
                 PrintToDriver("> Test\n");
             }
         }
+
+        if(count>10){
+            count--;
+        }
+        if(count==0){
+            m_carStatus.position.Y = 1;
+        }
+
+
 
 
 
@@ -41,6 +52,7 @@ void Controller::ControllerLoop()
         CarStatus *selectedLead = SelectLead(m_carsRegistry, m_carStatus);
         TrafficLightStatus *selectedTrafficLight = SelectTrafficLight(m_trafficLightsRegistry, m_carStatus);
         if(selectedLead!=nullptr){
+
             bool lead_panne = analyseLead(m_carStatus,selectedLead,m_timeouts[selectedLead->ID]);
         }
 

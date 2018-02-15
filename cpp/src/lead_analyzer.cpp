@@ -11,8 +11,7 @@ CarStatus* SelectLead(std::map<int, CarStatus> &carsRegistry, const CarStatus &c
     for (auto it = carsRegistry.begin(); it != carsRegistry.end(); ++it)
     {
         //selected = nullptr;
-        if(it->second.position.X>carStatus.position.X && it->second.position.Y == carStatus.position.Y 
-            && it->second.panne==false){
+        if(it->second.position.X>carStatus.position.X && it->second.position.Y == carStatus.position.Y ){
             selected = &(it->second);
         }
         cout << "Panne: " << it->second.panne << endl;
@@ -24,6 +23,11 @@ CarStatus* SelectLead(std::map<int, CarStatus> &carsRegistry, const CarStatus &c
         PrintToDriver("> LeadAnalyzer: No lead has been found.");
     } else {
         PrintToDriver("> LeadAnalyzer: Following a Lead !");
+    }
+
+    if(selected != nullptr && selected->panne==true)
+    {
+        PrintToDriver("> Lead en panne changer de voie !");
     }
     return selected;
 }
