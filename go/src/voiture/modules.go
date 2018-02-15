@@ -178,7 +178,7 @@ func getOptimalVitesseFeu(f Feu, status StatusVoiture, vitesse float64) (bool, f
 	if f.Couleur.String() == "RED"{
 		if modulo <= tempsFeuTotal{
 			//mod := math.Mod(tempsVoitureArriveFeu,tempsFeuTotal)
-			nouvelleVitesse := distanceFeuVoiture/(tempsVoitureArriveFeu + (tempsFeuTotal- modulo+2))
+			nouvelleVitesse := distanceFeuVoiture/(tempsVoitureArriveFeu + (tempsFeuTotal- modulo))
 			//conducteur.VitesseFeu(float64(nouvelleVitesse)*3.6,f)
 			return true, nouvelleVitesse*3.6
 
@@ -192,7 +192,7 @@ func getOptimalVitesseFeu(f Feu, status StatusVoiture, vitesse float64) (bool, f
 			return false, 0
 		}else{
 			//log.Println("la couleur est VERTE et la voiture va arriver au rouge")
-			nouvelleVitesse := distanceFeuVoiture/(tempsVoitureArriveFeu+ (2*tempsFeuTotal-(modulo+2)))
+			nouvelleVitesse := distanceFeuVoiture/(tempsVoitureArriveFeu+ (2*tempsFeuTotal-(modulo)))
 			//conducteur.VitesseFeu(float64(nouvelleVitesse)*3.6,f)
 			return true, nouvelleVitesse*3.6
 		}

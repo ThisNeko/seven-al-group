@@ -70,7 +70,7 @@ public class Connexion implements Runnable {
                                 Voiture v = new Voiture();
                                 v.setId(id);
                                 v.setPositionX(posX);
-                                v.setPositionY(posY);       
+                                v.setPositionY(posY);
                                 v.setVitesseX(vitesse);
                                 v.setTimeStamp(System.currentTimeMillis());
                                 v.setPanneVoiture(panne);

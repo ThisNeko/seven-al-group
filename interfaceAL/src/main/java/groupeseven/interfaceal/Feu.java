@@ -107,7 +107,7 @@ public class Feu {
         g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
         g.setFont(fonte);
-        g.drawString("" + timer, x, y + height / 2);
+        g.drawString("" + timer, x, y + height);
     }
 
 }
