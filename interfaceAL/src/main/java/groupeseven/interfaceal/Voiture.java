@@ -17,7 +17,6 @@ public class Voiture {
     private int positionY;
 
     private int vitesseX;
-    private int vitesseY;
 
     private long id;
     public int compteurDisparition = 0;
@@ -42,14 +41,6 @@ public class Voiture {
 
     public void setVitesseX(int vitesseX) {
         this.vitesseX = vitesseX;
-    }
-
-    public int getVitesseY() {
-        return vitesseY;
-    }
-
-    public void setVitesseY(int vitesseY) {
-        this.vitesseY = vitesseY;
     }
 
     public int getPositionX() {
