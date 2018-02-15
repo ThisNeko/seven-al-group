@@ -58,7 +58,7 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, Commu
             {
                 str = j["Info"];
                 j = json::parse(str);
-                // cout << j << endl;
+                cout << j << endl;
                 CarStatus s = JSONToCarStatus(j);
                 chanCar->put(s);
             }
@@ -66,6 +66,7 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, Commu
             {
                 str = j["Info"];
                 j = json::parse(str);
+                cout << j << endl;
                 TrafficLightStatus s = JSONToTrafficLightStatus(j);
                 chanTrafficLight->put(s);
             }
