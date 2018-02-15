@@ -128,7 +128,7 @@ public class Connexion implements Runnable {
                         }
                     }
                 } else {
-                    Thread.sleep(50);
+                    Thread.sleep(1);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(Connexion.class.getName()).log(Level.SEVERE, null, ex);

@@ -5,13 +5,16 @@
  */
 package groupeseven.interfaceal;
 
-import java.util.Date;
+import java.awt.*;
 
 /**
  *
  * @author user
  */
 public class Voiture {
+
+    private static final int WIDTH = 3;
+    private static final int HEIGHT = 1;
 
     private int positionX;
     private int positionY;
@@ -22,6 +25,8 @@ public class Voiture {
     public int compteurDisparition = 0;
     private boolean panneVoiture = false;
     private long timeStamp;
+
+    private static final Font fonte = new Font("", Font.BOLD, 30);
 
     public Voiture() {
 
@@ -85,5 +90,28 @@ public class Voiture {
      */
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public void draw(Graphics g, Screen screen){
+        long timeLaps = System.currentTimeMillis() - timeStamp;
+        if (timeLaps < 2000) {
+            int x = screen.toScreenCoordsX(positionX);
+            int y = screen.toScreenCoordsY(positionY);
+            int width = screen.toScreenCoordsX(WIDTH);
+            int height = screen.toScreenCoordsY(HEIGHT);
+
+            if (panneVoiture) {
+                g.setColor(Color.BLACK);
+            } else if (id % 2 == 0) {
+                g.setColor(Color.BLUE);
+            } else {
+                g.setColor(Color.ORANGE);
+            }
+
+            g.fillRect(x, y, width, height);
+            g.setColor(Color.WHITE);
+            g.setFont(fonte);
+            g.drawString("" + (int) vitesseX, x, y + height);
+        }
     }
 }
