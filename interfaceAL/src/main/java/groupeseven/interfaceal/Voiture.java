@@ -17,12 +17,11 @@ public class Voiture {
     private int positionY;
 
     private int vitesseX;
-    private int vitesseY;
 
     private long id;
     public int compteurDisparition = 0;
     private boolean panneVoiture = false;
-    public Date timeStamp = null;
+    private long timeStamp;
 
     public Voiture() {
 
@@ -42,14 +41,6 @@ public class Voiture {
 
     public void setVitesseX(int vitesseX) {
         this.vitesseX = vitesseX;
-    }
-
-    public int getVitesseY() {
-        return vitesseY;
-    }
-
-    public void setVitesseY(int vitesseY) {
-        this.vitesseY = vitesseY;
     }
 
     public int getPositionX() {
@@ -80,5 +71,19 @@ public class Voiture {
      */
     public void setPanneVoiture(boolean panneVoiture) {
         this.panneVoiture = panneVoiture;
+    }
+
+    /**
+     * @return the timeStamp
+     */
+    public long getTimeStamp() {
+        return timeStamp;
+    }
+    
+    /**
+     * @param timeStamp the timeStamp to set
+     */
+    public void setTimeStamp(long timeStamp) {
+        this.timeStamp = timeStamp;
     }
 }
