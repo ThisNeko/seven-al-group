@@ -47,7 +47,7 @@ void Broadcaster_wifi::BroadcasterLoop(CarStatus *carStatus)
         json j;
         j["TypeEnum"] = "VOITURE";
         j["Info"] = infos.dump();
-        std::string str = j.dump();
+        std::string str = j.dump() + "\n";
         std::cout << str << std::endl;
         int rez = send(sock , str.c_str() , str.size() , 0 );
         usleep(20000);
