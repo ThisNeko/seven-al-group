@@ -73,7 +73,7 @@ int main(int argc, char *argv[]){
 	carStatus->vitesse.X = 0;
 	carStatus->vitesse.Y = 0;
 	carStatus->position.X = std::stod(argv[1]);
-	carStatus->position.Y = 0;
+	carStatus->position.Y = std::stod(argv[2]);
 
 	std::thread threadController(start_controller, chanControllerReceiverCar, chanControllerReceiverTrafficLight,
 								 chanControllerFollowDirections, carStatus);
