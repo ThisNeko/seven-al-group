@@ -63,7 +63,6 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, Commu
                 if (s.ID != ignoreId)
                 {
                     chanCar->put(s);
-                    cout << "Okay!" << endl;
                 }
             }
             else if (j["TypeEnum"] == "FEU")

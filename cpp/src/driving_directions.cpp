@@ -27,11 +27,9 @@ Directions ComputeDrivingDirections(const CarStatus &carStatus, CarStatus const 
     }
     else if (trafficLight != nullptr)
     {
-        cout << "ok" << " " << trafficLight->couleur << endl;
         if (trafficLight->couleur == RED && trafficLight->pos.X > carStatus.position.X)
         {
-            cout << "yes" << endl;
-            int tempsFeuVert = trafficLight->ticker + 1;
+            int tempsFeuVert = trafficLight->timer - trafficLight->ticker + 1;
             double distance = trafficLight->pos.X - carStatus.position.X;
             double vitesseNeeded = (distance / tempsFeuVert) * 3.6;
             if (vitesseNeeded <= MAX_SPEED)
