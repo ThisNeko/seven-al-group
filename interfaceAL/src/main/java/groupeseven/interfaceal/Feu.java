@@ -100,9 +100,9 @@ public class Feu {
         int height = screen.toScreenCoordsY(HEIGHT);
 
         if (couleur == 1) {
-            g.setColor(Color.RED);
-        } else {
             g.setColor(Color.GREEN);
+        } else {
+            g.setColor(Color.RED);
         }
         g.fillRect(x, y, width, height);
         g.setColor(Color.BLACK);
