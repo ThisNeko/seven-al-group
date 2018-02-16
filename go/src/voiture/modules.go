@@ -173,7 +173,7 @@ func getOptimalVitesseFeu(f Feu, status StatusVoiture, vitesse float64) (bool, f
 	tempsVoitureArriveFeu := (distanceFeuVoiture)/(vitesseVoiture.X/3.6)
 	//log.Println("tempsVoitureFeu = ",tempsVoitureFeu)
 	//log.Println("tempsVoitureArriveFeu = ",tempsVoitureArriveFeu)
-	modulo := math.Mod(tempsVoitureArriveFeu+float64(tempsEcoule),2*tempsFeuTotal)
+	modulo := math.Mod(tempsVoitureArriveFeu+float64(tempsEcoule)-1,2*tempsFeuTotal)
 	//log.Println("modulo = ",modulo)
 	if f.Couleur.String() == "RED"{
 		if modulo <= tempsFeuTotal{

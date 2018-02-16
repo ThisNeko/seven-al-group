@@ -89,7 +89,7 @@ func StatusLoop(status *StatusVoiture, stat *Data, mods *ModuleDispatcher, conn 
 				Vitesse{mat.Vitesse,0},
 				Position{mat.Position.X,mat.Position.Y},
 				mat.Panne,
-				//time.Now().UTC().UnixNano(),
+				time.Now().UTC().UnixNano(),
 			}
 			conn.Broadcast(info)
 		case response := <- stat.getStatus:
@@ -129,7 +129,7 @@ func (data *Data) Start(mods *ModuleDispatcher, conn *connection){
 	var status StatusVoiture
 	lead := -1
 	go RegisterLoop(data,mods,voitures,feux,timeouts,&lead)
-	go TimeoutLoop(mods,data,timeouts)
+	//go TimeoutLoop(mods,data,timeouts)
 	go StatusLoop(&status, data, mods, conn)
 	go LeadLoop(&status,data,&lead)
 }

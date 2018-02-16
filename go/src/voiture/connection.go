@@ -8,6 +8,7 @@ import (
 	"math/rand"
 	"bufio"
 	//"time"
+	"time"
 )
 
 type message struct{
@@ -20,7 +21,7 @@ type InfoVoiture struct{
 	Vitesse Vitesse
 	Position Position
 	Panne bool
-	//Timestamp int64
+	Timestamp int64
 }
 
 func NewMessage(status Data) InfoVoiture {
@@ -30,7 +31,7 @@ func NewMessage(status Data) InfoVoiture {
 		s.Vitesse,
 		s.Position,
 		s.Panne,
-		//time.Now().UTC().UnixNano()
+		time.Now().UTC().UnixNano(),
 		}
 }
 
@@ -80,7 +81,7 @@ func (c connection) receiverLoop(reg *Data){
 
 	for{
 		mess := receive(c.conn)
-		//timestamp := time.Now().UTC().UnixNano()
+		timestamp := time.Now().UTC().UnixNano()
 		//log.Println("Received:")
 		//log.Println(mess)
 		if mess.TypeEnum=="VOITURE"{
@@ -89,8 +90,8 @@ func (c connection) receiverLoop(reg *Data){
 			if err != nil {
 				log.Fatal(err)
 			}
-			//delay := timestamp - mat.Timestamp
-			//log.Printf("Delay : %v ms\n",delay)
+			delay := timestamp - mat.Timestamp
+			log.Printf("Delay : %v ms\n",delay)
 			s := StatusVoiture{mat.ID,mat.Vitesse, mat.Position,mat.Panne}
 			reg.UpdateVoiture(s)
 			//log.Println("La voiture recoit un message d'une autre voiture")
