@@ -34,10 +34,10 @@ void start_wifi_broadcaster(CarStatus *carStatus)
 }
 
 void start_wifi_receiver(CommunicationChannel<CarStatus> *chanControllerReceiverCar,
-						 CommunicationChannel<TrafficLightStatus> *chanControllerReceiverTrafficLight)
+						 CommunicationChannel<TrafficLightStatus> *chanControllerReceiverTrafficLight, int ignoreId)
 {
 	Receptor_wifi receptor;
-	receptor.ReceptorLoop(chanControllerReceiverCar, chanControllerReceiverTrafficLight);
+	receptor.ReceptorLoop(chanControllerReceiverCar, chanControllerReceiverTrafficLight, ignoreId);
 }
 
 void start_car_interface(CarStatus *carStatus)
@@ -66,7 +66,7 @@ int main(int argc, char *argv[]){
 	std::thread threadController(start_controller, chanControllerReceiverCar, chanControllerReceiverTrafficLight,
 								 chanControllerFollowDirections, carStatus);
     std::thread threadWifiBroadcaster	(start_wifi_broadcaster, carStatus);
-	std::thread threadWifiReceiver		(start_wifi_receiver, chanControllerReceiverCar, chanControllerReceiverTrafficLight);
+	std::thread threadWifiReceiver		(start_wifi_receiver, chanControllerReceiverCar, chanControllerReceiverTrafficLight, carStatus->ID);
 	std::thread threadCarInterface		(start_car_interface, carStatus);
 	std::thread threadFollowDirections	(start_follow_directions, chanControllerFollowDirections, carStatus);
 

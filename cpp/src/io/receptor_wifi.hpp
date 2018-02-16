@@ -9,7 +9,7 @@ class Receptor_wifi
 {
 public:
 	Receptor_wifi();
-	void ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, CommunicationChannel<TrafficLightStatus> *chanTrafficLight);
+	void ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, CommunicationChannel<TrafficLightStatus> *chanTrafficLight, int ignoreId);
 
 };
 

@@ -20,7 +20,7 @@ using json = nlohmann::json;
 Receptor_wifi::Receptor_wifi(){}
 
   
-void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, CommunicationChannel<TrafficLightStatus> *chanTrafficLight)
+void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, CommunicationChannel<TrafficLightStatus> *chanTrafficLight, int ignoreId)
 {
     struct sockaddr_in address;
     int sock = 0, valread;
@@ -56,12 +56,15 @@ void Receptor_wifi::ReceptorLoop(CommunicationChannel<CarStatus> *chanCar, Commu
             auto j = json::parse(str);
             if (j["TypeEnum"] == "VOITURE")
             {
-                cout << str << endl;
                 str = j["Info"];
                 j = json::parse(str);
                 // cout << j << endl;
                 CarStatus s = JSONToCarStatus(j);
-                chanCar->put(s);
+                if (s.ID != ignoreId)
+                {
+                    chanCar->put(s);
+                    cout << "Okay!" << endl;
+                }
             }
             else if (j["TypeEnum"] == "FEU")
             {

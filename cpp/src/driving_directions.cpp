@@ -12,34 +12,32 @@ Directions ComputeDrivingDirections(const CarStatus &carStatus, CarStatus const 
     directions.vitesseCible = 30;
     directions.doitFreiner = false;
 
-    if (lead == nullptr && trafficLight == nullptr)
+    if (lead != nullptr)
     {
-        return directions;
-    }
-
-    if (lead == nullptr)
-    {
-        return directions;
-    }
-
-    double futurX = (double)(carStatus.vitesse.X != 0 ? carStatus.vitesse.X : MAX_SPEED) / 3.6 + carStatus.position.X;
-    if(lead->position.X - futurX < 3)
-    {
-        if (carStatus.vitesse.X != 0)
+        double futurX = (double)(carStatus.vitesse.X != 0 ? carStatus.vitesse.X : MAX_SPEED) / 3.6 + carStatus.position.X;
+        if(lead->position.X - futurX < 3)
         {
-            PrintToDriver("FREINAGE D'URGENCE");
+            if (carStatus.vitesse.X != 0)
+            {
+                PrintToDriver("FREINAGE D'URGENCE");
+            }
+            directions.vitesseCible = 0;
+            return directions;
         }
-        directions.vitesseCible = 0;
-        return directions;
     }
     else if (trafficLight != nullptr)
     {
-        int tempsFeuVert = trafficLight->ticker + 1;
-        double distance = trafficLight->pos.X - carStatus.position.X;
-        double vitesseNeeded = (distance / tempsFeuVert) * 3.6;
-        if (vitesseNeeded <= MAX_SPEED)
+        cout << "ok" << " " << trafficLight->couleur << endl;
+        if (trafficLight->couleur == RED && trafficLight->pos.X > carStatus.position.X)
         {
-            directions.vitesseCible = vitesseNeeded;
+            cout << "yes" << endl;
+            int tempsFeuVert = trafficLight->ticker + 1;
+            double distance = trafficLight->pos.X - carStatus.position.X;
+            double vitesseNeeded = (distance / tempsFeuVert) * 3.6;
+            if (vitesseNeeded <= MAX_SPEED)
+            {
+                directions.vitesseCible = vitesseNeeded;
+            }
         }
     }
 
