@@ -57,6 +57,7 @@ int main(int argc, char *argv[]){
 	CommunicationChannel<Directions> *chanControllerFollowDirections 				= new CommunicationChannel<Directions>;
 
 	CarStatus *carStatus = new CarStatus;
+	carStatus->ID = 5;
 	carStatus->vitesse.X = 0;
 	carStatus->vitesse.Y = 0;
 	carStatus->position.X = std::stod(argv[1]);
