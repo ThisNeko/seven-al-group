@@ -16,19 +16,19 @@ void FollowDirectionsLoop(CommunicationChannel<Directions> *chan, CarStatus *car
         Directions d = chan->get();
 
         // cout << d->vitesse.X << endl;
-
+        
         // if (d.vitesseCible == 0)
         // {
         //     carStatus->vitesse.X = 0;
         // }
         if (d.vitesseCible < carStatus->vitesse.X)
         {
-            cout << ">>> MESSAGE AU CONDUCTEUR: DECCELERE A " << d.vitesseCible << " km/h" << endl;
+            // cout << ">>> MESSAGE AU CONDUCTEUR: DECCELERE A " << d.vitesseCible << " km/h" << endl;
             carStatus->vitesse.X = d.vitesseCible;
         }
         else if (d.vitesseCible > carStatus->vitesse.X)
         {
-            cout << ">>> MESSAGE AU CONDUCTEUR: ACCELERE A " << d.vitesseCible << " km/h" << endl;
+            // cout << ">>> MESSAGE AU CONDUCTEUR: ACCELERE A " << d.vitesseCible << " km/h" << endl;
             carStatus->vitesse.X = d.vitesseCible;
         }
     }

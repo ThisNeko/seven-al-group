@@ -16,6 +16,8 @@
 #include <unistd.h>
 #include <string>
 
+using namespace std;
+
 using json = nlohmann::json;
 
 void start_controller(CommunicationChannel<CarStatus> *chanControllerReceiverCar,
@@ -51,6 +53,16 @@ void start_follow_directions(CommunicationChannel<Directions> *chanControllerFol
 	FollowDirectionsLoop(chanControllerFollowDirections, carStatus);
 }
 
+void print_status(CarStatus *carStatus)
+{
+	return;
+	while(true)
+	{
+		cout << "X: " << carStatus->position.X << ", vitesse " << carStatus->vitesse.X << endl;
+		sleep(1);
+	}
+}
+
 int main(int argc, char *argv[]){
 	CommunicationChannel<CarStatus> *chanControllerReceiverCar 						= new CommunicationChannel<CarStatus>;
 	CommunicationChannel<TrafficLightStatus> *chanControllerReceiverTrafficLight	= new CommunicationChannel<TrafficLightStatus>;
@@ -69,12 +81,14 @@ int main(int argc, char *argv[]){
 	std::thread threadWifiReceiver		(start_wifi_receiver, chanControllerReceiverCar, chanControllerReceiverTrafficLight, carStatus->ID);
 	std::thread threadCarInterface		(start_car_interface, carStatus);
 	std::thread threadFollowDirections	(start_follow_directions, chanControllerFollowDirections, carStatus);
+	std::thread printStatus	(print_status, carStatus);
 
 	threadController.join();
 	threadWifiBroadcaster.join();
 	threadWifiReceiver.join();
 	threadCarInterface.join();
 	threadFollowDirections.join();
+	printStatus.join();
 
 	return 0;
 }

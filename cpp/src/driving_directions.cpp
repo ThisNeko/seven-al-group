@@ -15,7 +15,7 @@ Directions ComputeDrivingDirections(const CarStatus &carStatus, CarStatus const 
     if (lead != nullptr)
     {
         double futurX = (double)(carStatus.vitesse.X != 0 ? carStatus.vitesse.X : MAX_SPEED) / 3.6 + carStatus.position.X;
-        if(lead->position.X - futurX < 3)
+        if(lead->position.X - futurX < 1)
         {
             if (carStatus.vitesse.X != 0)
             {
